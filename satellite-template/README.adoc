@@ -1,0 +1,74 @@
+// SPDX-License-Identifier: MPL-2.0-or-later
+
+== License & Philosophy
+
+This project must declare **MPL-2.0-or-later** for platform/tooling compatibility.
+
+Philosophy: **Palimpsest**. The Palimpsest-MPL (PMPL) text is provided in `license/PMPL-1.0.txt`, and the canonical source is the palimpsest-license repository.
+// SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
+= vex-SATELLITE_NAME
+
+image:[Palimpsest-MPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+:toc: preamble
+:toclevels: 2
+
+TAGLINE
+
+== Overview
+
+DESCRIPTION
+
+=== Vexometer Integration
+
+This satellite targets the following vexometer metrics:
+
+* TARGET_METRICS
+
+Integration with vexometer is *optional*. This tool works standalone.
+
+== Installation
+
+[source,bash]
+----
+# Using Alire (Ada)
+alr get vex-SATELLITE_NAME
+
+# Using Cargo (Rust)
+cargo install vex-SATELLITE_NAME
+
+# Using Nix
+nix profile install github:hyperpolymath/vex-SATELLITE_NAME
+----
+
+== Usage
+
+[source,bash]
+----
+# Basic usage
+vex-SATELLITE_NAME analyse input.txt
+
+# With vexometer trace output
+vex-SATELLITE_NAME --trace before.json after.json
+----
+
+== Building
+
+[source,bash]
+----
+# Build
+just build
+
+# Test
+just test
+
+# Check (lint + type check)
+just check
+----
+
+== License
+
+PMPL-1.0-or-later. See link:LICENSE.txt[LICENSE.txt].
+
+== Contributing
+
+See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc].

@@ -1,0 +1,153 @@
+.\" SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+.\" Man page for vextd
+.TH VEXTD 1 "December 2025" "vext 1.0.0" "User Commands"
+.SH NAME
+vextd \- high-performance IRC notification daemon
+.SH SYNOPSIS
+.B vextd
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+.B vextd
+is a high-performance IRC notification daemon for version control systems.
+It listens for JSON-formatted notifications on a UDP socket and relays them
+to specified IRC channels.
+.PP
+vextd is a modern Rust rewrite of irker, featuring async I/O, connection
+pooling, rate limiting, and TLS support.
+.SH OPTIONS
+.TP
+.BR \-l ", " \-\-listen =\fIADDRESS\fR
+Listen address for notifications (default: 127.0.0.1:6659)
+.TP
+.BR \-c ", " \-\-config =\fIFILE\fR
+Path to configuration file (TOML format)
+.TP
+.BR \-v ", " \-\-verbose
+Enable verbose logging. Can be specified multiple times for increased verbosity.
+.TP
+.BR \-n ", " \-\-foreground
+Run in foreground (do not daemonize)
+.TP
+.BR \-\-default\-server =\fISERVER\fR
+Default IRC server if not specified in notification (default: irc.libera.chat)
+.TP
+.BR \-\-default\-port =\fIPORT\fR
+Default IRC port (default: 6697)
+.TP
+.BR \-\-tls
+Use TLS for IRC connections
+.TP
+.BR \-\-max\-connections =\fINUM\fR
+Maximum connections per server (default: 4)
+.TP
+.BR \-\-nick =\fIPREFIX\fR
+Nick prefix for the bot (default: vext)
+.TP
+.BR \-h ", " \-\-help
+Print help message and exit
+.TP
+.BR \-V ", " \-\-version
+Print version information and exit
+.SH NOTIFICATION FORMAT
+Notifications are JSON objects sent via UDP:
+.PP
+.RS
+.nf
+{
+  "to": ["irc://irc.libera.chat/#channel"],
+  "privmsg": "Commit message here",
+  "project": "myproject",
+  "branch": "main"
+}
+.fi
+.RE
+.PP
+.B Required fields:
+.TP
+.B to
+Array of IRC target URLs
+.TP
+.B privmsg
+Message to send
+.PP
+.B Optional fields:
+.TP
+.B project
+Project name for formatting
+.TP
+.B branch
+Branch name
+.TP
+.B commit
+Commit hash
+.TP
+.B author
+Author name
+.TP
+.B url
+URL to include in message
+.SH IRC URL FORMAT
+.PP
+.RS
+irc://\fIserver\fR[:\fIport\fR]/\fIchannel\fR[?key=\fIsecret\fR]
+.RE
+.PP
+.B Examples:
+.RS
+.nf
+irc://irc.libera.chat/#vext
+irc://irc.libera.chat:6697/#vext
+ircs://irc.libera.chat/#private?key=secret
+.fi
+.RE
+.SH FILES
+.TP
+.I /etc/vext/vext.toml
+System-wide configuration file
+.TP
+.I ~/.config/vext/vext.toml
+User configuration file
+.SH EXAMPLES
+.PP
+Start daemon in foreground with verbose logging:
+.RS
+.nf
+vextd --foreground -vv
+.fi
+.RE
+.PP
+Listen on all interfaces with TLS:
+.RS
+.nf
+vextd --listen 0.0.0.0:6659 --tls
+.fi
+.RE
+.PP
+Send a test notification:
+.RS
+.nf
+echo '{"to":["irc://irc.libera.chat/#test"],"privmsg":"Hello"}' | nc -u localhost 6659
+.fi
+.RE
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+General error
+.TP
+.B 2
+Configuration error
+.SH SEE ALSO
+.BR vext-send (1),
+.BR irker (1)
+.SH BUGS
+Report bugs at: https://github.com/hyperpolymath/vext/issues
+.SH AUTHOR
+Hyperpolymath <https://github.com/hyperpolymath>
+.SH COPYRIGHT
+Copyright \(co 2025 Vext Contributors.
+License: MIT OR AGPL-3.0-or-later.
+.PP
+This is free software; see the source for copying conditions.

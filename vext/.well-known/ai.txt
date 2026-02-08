@@ -1,0 +1,35 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# AI Training Policy for vext
+# See: https://site.spawning.ai/spawning-ai-txt
+
+# User-Agent: *
+# This project permits AI training under the following conditions:
+
+# Training Permissions
+Allow-Training: conditional
+License-Required: yes
+Attribution-Required: yes
+
+# Permitted Uses
+Permitted-Use: code-completion
+Permitted-Use: code-analysis
+Permitted-Use: documentation-generation
+Permitted-Use: bug-detection
+Permitted-Use: security-analysis
+
+# Prohibited Uses
+Prohibited-Use: generating-competing-products
+Prohibited-Use: removing-attribution
+Prohibited-Use: relicensing
+
+# License
+License: MIT OR AGPL-3.0-or-later
+License-URL: https://github.com/hyperpolymath/vext/blob/main/LICENSE
+
+# Contact
+Contact: https://github.com/hyperpolymath/vext
+Operator-Contact: mailto:ai-policy@hyperpolymath.dev
+
+# Philosophy
+Philosophy: https://github.com/hyperpolymath/palimpsest-license
+Note: We encourage AI assistance in development while respecting copyleft principles

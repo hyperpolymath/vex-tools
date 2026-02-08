@@ -1,0 +1,65 @@
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+// SPDX-License-Identifier: PMPL-1.0-or-later
+
+= vex-tools: Unified VEX Toolkit
+:author: Jonathan D.A. Jewell
+:email: jonathan.jewell@open.ac.uk
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+image:https://img.shields.io/badge/License-PMPL--1.0--or--later-6366f1?style=flat&labelColor=4338ca[PMPL-1.0-or-later,link="https://github.com/hyperpolymath/palimpsest-license"]
+image:https://img.shields.io/badge/RSR-compliant-brightgreen[RSR Compliant]
+
+Consolidated monorepo for all VEX-related tools: the Vexometer irritation surface analyser, its satellite intervention system, and the Vext verifiable communications protocol.
+
+== Repository Structure
+
+[cols="2,4", options="header"]
+|===
+| Directory | Description
+
+| `vexometer/`
+| **Vexometer** -- Irritation surface analyser for AI assistants. Quantifies irritation across 10 dimensions with standardised, reproducible metrics.
+
+| `vexometer-satellites/`
+| **Vexometer Satellites** -- Umbrella documentation and coordination hub for the satellite intervention system.
+
+| `satellite-template/`
+| **Satellite Template** -- Scaffolding template for creating new vexometer satellite projects.
+
+| `lazy-eliminator/`
+| **Lazy Eliminator** -- Completeness enforcement for LLM-generated code. Detects and eliminates lazy patterns.
+
+| `vext/`
+| **Vext** -- Verifiable, Extensible Communications Protocol with cryptographic proof of algorithmic neutrality.
+
+| `vext-email-gateway/`
+| **Vext Email Gateway** -- Email bridge for interoperability between Vext and traditional email.
+|===
+
+== Quick Start
+
+[source,bash]
+----
+just build-vexometer
+just build-vext
+just test-all
+just build-all
+----
+
+== Component Origins
+
+This monorepo was consolidated from six independent repositories:
+
+* `hyperpolymath/vexometer` -> `vexometer/`
+* `hyperpolymath/vexometer-satellites` -> `vexometer-satellites/`
+* `hyperpolymath/vex-satellite-template` -> `satellite-template/`
+* `hyperpolymath/vex-lazy-eliminator` -> `lazy-eliminator/`
+* `hyperpolymath/vext` -> `vext/`
+* `hyperpolymath/vext-email-gateway` -> `vext-email-gateway/`
+
+== License
+
+PMPL-1.0-or-later (Palimpsest License). See link:LICENSE[LICENSE].

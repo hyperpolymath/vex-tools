@@ -1,0 +1,43 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# justfile for vex-lazy-eliminator
+
+# Build the project
+build:
+    cargo build --release
+
+# Run tests
+test:
+    cargo test
+
+# Check code quality (lint + type check)
+check:
+    cargo clippy -- -D warnings
+    cargo fmt -- --check
+
+# Format code
+fmt:
+    cargo fmt
+
+# Run the CLI
+run *ARGS:
+    cargo run -- {{ARGS}}
+
+# Generate docs
+docs:
+    cargo doc --no-deps --open
+
+# Clean build artifacts
+clean:
+    cargo clean
+
+# Install locally
+install:
+    cargo install --path .
+
+# Run benchmarks
+bench:
+    cargo bench
+
+# Check dependencies for security issues
+audit:
+    cargo audit

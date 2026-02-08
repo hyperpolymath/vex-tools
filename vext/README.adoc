@@ -1,0 +1,232 @@
+= Vext: Verifiable, Extensible Communications Protocol
+:author: Jonathan D.A. Jewell
+:email: jonathan.jewell@open.ac.uk
+:toc: left
+:toclevels: 3
+
+image:https://img.shields.io/badge/license-PMPL--1.0--or--later-indigo[License]
+image:https://img.shields.io/badge/status-research-yellow[Status]
+image:https://img.shields.io/badge/requires-Idris2-blue[Idris2]
+
+== Overview
+
+**Vext** is a cryptographically verifiable communications protocol that provides mathematical proof of algorithmic neutrality. It combines proven protocols (NNTP, Email, Gemini) with modern cryptographic guarantees (Merkle trees, digital signatures, formal verification).
+
+**Key Innovation:** The **a2ml** (Anti-Algorithm Markup Language) verification layer, which requires Idris2's dependent types to provide compile-time proofs of feed integrity.
+
+=== The Problem
+
+Modern social media platforms:
+
+* ❌ Use opaque algorithms to reorder, filter, and inject content
+* ❌ Insert advertisements disguised as organic content
+* ❌ Shadowban users without transparency
+* ❌ Profile users for targeted manipulation
+* ❌ Cannot prove they don't manipulate feeds
+
+**Result:** Information asymmetry, manipulation, broken economics for creators.
+
+=== The Solution
+
+Vext provides **cryptographic proofs** that feeds are:
+
+* ✅ **Chronological** (not algorithmically sorted)
+* ✅ **Ad-free** (no injected advertisements)
+* ✅ **Uncensored** (no hidden messages)
+* ✅ **Verifiable** (users can check the math)
+
+**Don't trust us. Verify the cryptography.**
+
+== Architecture
+
+=== Three Layers
+
+[source]
+----
+┌──────────────────────────────────┐
+│  a2ml Verification Layer         │  ← NEW (Idris2, dependent types)
+│  (Cryptographic proofs)          │
+├──────────────────────────────────┤
+│  NNTPS Transport Layer           │  ← EXISTING (40+ years proven)
+│  (Flooding, distribution)        │
+├──────────────────────────────────┤
+│  TCP/IP + TLS                    │
+└──────────────────────────────────┘
+----
+
+=== a2ml: Anti-Algorithm Markup Language
+
+**Why Idris2?**
+
+a2ml requires *dependent types* to prove properties at compile-time:
+
+* **Type-level proofs** that feeds are chronological
+* **Totality checking** (proofs cannot loop infinitely)
+* **Linear types** (resources consumed exactly once)
+* **Formal verification** exceeding what ATS, Rust, or Coq can provide
+
+**Example (Idris2):**
+[source,idris]
+----
+-- Chronological feed proven at TYPE LEVEL
+data ChronologicalFeed : List Message -> Type where
+  Empty : ChronologicalFeed []
+  Cons : (m1 : Message) -> (m2 : Message) ->
+         {auto prf : timestamp m1 <= timestamp m2} ->
+         ChronologicalFeed (m2 :: rest) ->
+         ChronologicalFeed (m1 :: m2 :: rest)
+
+-- IMPOSSIBLE to construct if feed isn't chronological!
+----
+
+This is impossible in Rust, Go, or even ATS.
+
+=== Protocol Bridges
+
+Vext connects to existing protocols:
+
+[cols="2,3,2"]
+|===
+|Protocol |Use Case |Status
+
+|*NNTP* |Newsgroups, power users |Core protocol
+|*Email* |Universal access, mailing lists |Gateway implemented
+|*SMS* |Mobile access (basic) |Planned
+|*RCS* |Mobile access (rich) |Planned
+|*Gemini* |Smol internet, privacy |Planned
+|*Matrix* |Federation bridge |High priority
+|*Web* |Universal fallback |PWA planned
+|===
+
+== Use Cases
+
+=== For Journalists
+
+* **Attribution guaranteed** (cryptographic signatures)
+* **No censorship** (provably uncensored feeds)
+* **Source protection** (E2E encryption for DMs)
+* **Fair compensation** (direct support, no platform tax)
+
+=== For Privacy Advocates
+
+* **No profiling** (no algorithmic targeting possible)
+* **No tracking** (DIDs instead of emails/phone numbers)
+* **Open source** (reproducible builds)
+* **Formal verification** (proven secure)
+
+=== For Everyone
+
+* **Chronological feeds** (like "the old internet")
+* **No ads** (cryptographically proven)
+* **No manipulation** (mathematically impossible)
+* **Works everywhere** (email, SMS, web, native apps)
+
+== Research
+
+=== arXiv Paper (Planned)
+
+**Title:** _Cryptographic Proofs of Algorithmic Neutrality in Federated Communication Systems_
+
+**Categories:**
+* cs.CR (Cryptography and Security) - Primary
+* cs.NI (Networking and Internet Architecture)
+* cs.CY (Computers and Society)
+
+**Status:** Implementation in progress, paper draft planned for Q2 2025
+
+See: link:docs/VEXT-ARXIV-PAPER-PLAN.md[arXiv Paper Plan]
+
+=== NUJ Discussion Paper
+
+**For:** National Union of Journalists Ethics Council
+
+**Framing:** Labor and ethics issue, not just technology:
+* Platform dependency hurts journalists
+* AI pollution undermines attribution
+* Broken economics (platform takes 30-50% cut)
+* Censorship without accountability
+
+See: link:docs/NUJ-VEXT-PROPOSAL.md[NUJ Proposal]
+
+== Implementation Status
+
+[cols="3,2,2"]
+|===
+|Component |Language |Status
+
+|*a2ml specification* |Idris2 |Design phase
+|*a2ml verification library* |Idris2 |Not started
+|*NNTP integration* |Rust |Planned
+|*Email gateway* |Rust |Prototype complete
+|*SMS/RCS gateway* |Rust |Planned
+|*Matrix bridge* |Rust |Planned
+|*Reference client* |Rust/Idris2 |Not started
+|*Formal verification* |Idris2/Kani |Design phase
+|===
+
+== Documentation
+
+* link:docs/VEXT-MANIFESTO.md[Manifesto] - Why vext exists
+* link:docs/VEXT-TECHNICAL-SPEC.md[Technical Specification] - Protocol details
+* link:docs/VEXT-ANTI-ALGORITHM-ARCHITECTURE.md[a2ml Architecture] - Cryptographic design
+* link:docs/VEXT-MULTICAST-ARCHITECTURE.md[Multicast Architecture] - Tag-based distribution
+* link:docs/VEXT-MOBILE-SMS-EMAIL.md[Mobile Strategy] - SMS/RCS/Email gateways
+* link:docs/VEXT-ADDITIONAL-PROTOCOLS.md[Protocol Bridges] - Matrix, Nostr, etc.
+* link:docs/VEXT-ARXIV-PAPER-PLAN.md[arXiv Paper Plan] - Research publication plan
+* link:ROADMAP.md[Roadmap] - Implementation timeline
+
+== Quick Start
+
+[source,bash]
+----
+# Clone repository
+git clone https://github.com/hyperpolymath/vext
+cd vext
+
+# Install Idris2 (required for a2ml)
+# See: https://idris-lang.org/pages/download.html
+
+# Build a2ml specification (when available)
+cd a2ml-spec
+idris2 --build
+
+# Run tests
+idris2 --test
+----
+
+== Contributing
+
+This is research-stage software. Contributions welcome, especially:
+
+* Idris2 experts (a2ml specification)
+* Cryptography experts (security review)
+* NNTP experts (protocol integration)
+* Formal verification experts (Idris2 proofs)
+
+See: link:CONTRIBUTING.md[Contributing Guidelines]
+
+== License
+
+SPDX-License-Identifier: PMPL-1.0-or-later
+
+Copyright (c) 2025 Jonathan D.A. Jewell
+
+See: link:LICENSE[Full License Text]
+
+== Contact
+
+* Author: Jonathan D.A. Jewell
+* Email: jonathan.jewell@open.ac.uk
+* GitHub: https://github.com/hyperpolymath/vext
+* Matrix: (coming soon)
+
+== Acknowledgments
+
+* NUJ (National Union of Journalists) - Labor perspective
+* NNTP community - 40+ years of proven protocol design
+* Idris2 community - Dependent types and formal verification
+* Journalists, activists, privacy advocates - Motivation and use cases
+
+---
+
+**"Don't trust us. Verify the math."**

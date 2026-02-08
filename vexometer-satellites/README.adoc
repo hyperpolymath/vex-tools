@@ -1,0 +1,377 @@
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+// SPDX-License-Identifier: PMPL-1.0-or-later
+
+= Vexometer Satellites
+:toc: left
+:toclevels: 3
+:icons: font
+:source-highlighter: rouge
+
+image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
+
+Umbrella documentation hub for the link:https://github.com/hyperpolymath/vexometer[vexometer] satellite intervention system.
+
+== Overview
+
+*Vexometer* is a diagnostic instrument that measures AI assistant irritation surfaces across 10 dimensions. *Satellites* are independent intervention tools that reduce specific irritation metrics.
+
+[quote]
+____
+Vexometer *measures* irritation. Satellites *fix* it.
+____
+
+This repository serves as:
+
+* *Central documentation hub* for the satellite ecosystem
+* *Integration protocol specifications* (vexometer-trace-v1, vexometer-efficacy-v1)
+* *Development roadmap* and priorities
+* *Registry* of all satellite repositories
+
+== Architecture
+
+[source]
+----
+vexometer ecosystem
+├── vexometer/                     # HUB - Diagnostic instrument
+│   ├── Measures 10 ISA metrics
+│   ├── Provides trace format spec
+│   └── Validates satellite efficacy
+│
+├── vexometer-satellites/          # THIS REPO - Documentation hub
+│   ├── Integration protocols
+│   ├── Development roadmap
+│   └── Satellite registry
+│
+└── vex-*/                         # SATELLITES - Interventions
+    ├── vex-lazy-eliminator/       # CII, LPS reduction
+    ├── vex-hallucination-guard/   # EFR reduction
+    └── ...                        # 10 more satellites
+----
+
+== The 10 Metrics
+
+Each satellite targets one or more of these irritation dimensions:
+
+[cols="1,2,4", options="header"]
+|===
+|Abbrev |Full Name |What It Measures
+
+|*TII*
+|Temporal Intrusion Index
+|Unsolicited outputs, latency disruption, flow interruption, auto-completion aggression
+
+|*LPS*
+|Linguistic Pathology Score
+|Sycophancy density, hedge word ratio, corporate speak, unnecessary repetition, emoji abuse
+
+|*EFR*
+|Epistemic Failure Rate
+|Confident hallucination, fabricated references, context ignorance, calibration error
+
+|*PQ*
+|Paternalism Quotient
+|Unsolicited warnings, over-explanation, competence assumption failures, refusal-with-lecture
+
+|*TAI*
+|Telemetry Anxiety Index
+|Data collection transparency, opt-out friction, code/query transmission clarity
+
+|*ICS*
+|Interaction Coherence Score
+|Repeated failures, learning from dismissal, circular conversations, context retention
+
+|*CII*
+|Completion Integrity Index
+|TODO comments, placeholders, unimplemented stubs, truncation markers, null implementations
+
+|*SRS*
+|Strategic Rigidity Score
+|Patch-on-patch fixes, restart resistance, sunk-cost language, approach anchoring
+
+|*SFR*
+|Scope Fidelity Ratio
+|Scope creep, scope collapse, partial delivery, explicit violations
+
+|*RCI*
+|Recovery Competence Index
+|Identical retries, minor variations, strategy changes, root cause analysis, escalation
+|===
+
+== Satellite Registry
+
+=== Status Legend
+
+* ✅ *Implemented* - Repository exists, code complete
+* 🚧 *In Development* - Repository exists, work in progress
+* 📋 *Planned* - Documented, not yet started
+* 🎯 *Priority* - Recommended next implementation
+
+=== High Priority
+
+[cols="2,1,2,3,2", options="header"]
+|===
+|Satellite |Status |Reduces |Description |Language
+
+|link:https://github.com/hyperpolymath/vex-lazy-eliminator[vex-lazy-eliminator]
+|🎯 📋
+|CII, LPS
+|Completeness enforcement for LLM outputs. AST-level validation with completeness predicates.
+|Rust
+
+|link:https://github.com/hyperpolymath/vex-hallucination-guard[vex-hallucination-guard]
+|📋
+|EFR
+|Verification layer for LLM factual claims. Registry adapters, citation validators, URL checking.
+|Rust + Elixir
+
+|link:https://github.com/hyperpolymath/vex-sycophancy-shield[vex-sycophancy-shield]
+|📋
+|LPS, EFR
+|Epistemic commitment tracking. AGM belief revision, justification graphs, pressure detection.
+|Haskell + Elixir
+|===
+
+=== Medium Priority
+
+[cols="2,1,2,3,2", options="header"]
+|===
+|Satellite |Status |Reduces |Description |Language
+
+|link:https://github.com/hyperpolymath/vex-confidence-calibrator[vex-confidence-calibrator]
+|📋
+|EFR
+|Structured uncertainty for LLM outputs. Epistemic status enum, calibration tracking, Brier score optimisation.
+|Rust
+
+|link:https://github.com/hyperpolymath/vex-specification-anchor[vex-specification-anchor]
+|📋
+|SFR, ICS
+|Immutable requirements ledger. Content-addressed spec storage, amendment protocol, deviation detection.
+|Rust + CUE/Dhall
+
+|link:https://github.com/hyperpolymath/vex-instruction-persistence[vex-instruction-persistence]
+|📋
+|TII, ICS
+|System instruction compliance enforcement. Instruction registry with salience weights, decay detection.
+|Elixir/OTP
+
+|link:https://github.com/hyperpolymath/vex-backtrack-enabler[vex-backtrack-enabler]
+|📋
+|SRS, ICS
+|Low-friction restart support. Decision tree with savepoints, cost-benefit analysis, debt tracking.
+|Elixir/OTP + Rust
+|===
+
+=== Standard Priority
+
+[cols="2,1,2,3,2", options="header"]
+|===
+|Satellite |Status |Reduces |Description |Language
+
+|link:https://github.com/hyperpolymath/vex-context-firewall[vex-context-firewall]
+|📋
+|EFR, ICS
+|Truth maintenance for conversation context. Doyle's TMS, dependency graphs, retraction propagation.
+|Haskell + Rust
+
+|link:https://github.com/hyperpolymath/vex-scope-governor[vex-scope-governor]
+|📋
+|SFR, PQ
+|Scope contract enforcement. Scope contract DSL, boundary enforcement, completeness verification.
+|Rust
+
+|link:https://github.com/hyperpolymath/vex-error-recovery[vex-error-recovery]
+|📋
+|RCI
+|Strategy variation on failure. Attempt fingerprinting, strategy variation generator, escalation state machine.
+|Rust
+
+|link:https://github.com/hyperpolymath/vex-verbosity-compressor[vex-verbosity-compressor]
+|📋
+|LPS, TII
+|Information density optimisation. Semantic redundancy detection, filler phrase stripping.
+|Rust
+
+|link:https://github.com/hyperpolymath/vex-clarification-gate[vex-clarification-gate]
+|📋
+|PQ, TII
+|Risk-weighted ambiguity handling. Ambiguity detection, risk assessment, assumption ranking.
+|Rust + Elixir
+|===
+
+== Integration Protocols
+
+=== vexometer-trace-v1
+
+Satellites can include before/after traces that vexometer validates.
+
+[source,json]
+----
+{
+  "version": "vexometer-trace-v1",
+  "satellite": "vex-lazy-eliminator",
+  "timestamp": "2026-01-24T10:30:00Z",
+  "scenario": {
+    "description": "Code generation with completeness requirement",
+    "prompt": "Write a function to parse JSON config files",
+    "context": {}
+  },
+  "before": {
+    "response": "def parse_config(path):\n    # TODO: implement\n    pass",
+    "metrics": {
+      "CII": 0.85,
+      "LPS": 0.30
+    }
+  },
+  "after": {
+    "response": "def parse_config(path):\n    with open(path) as f:\n        return json.load(f)",
+    "metrics": {
+      "CII": 0.0,
+      "LPS": 0.10
+    }
+  },
+  "reduction": {
+    "CII": 0.85,
+    "LPS": 0.20
+  }
+}
+----
+
+See link:docs/trace-format.adoc[trace-format.adoc] for full specification.
+
+=== vexometer-efficacy-v1
+
+Satellites report metric reduction percentages.
+
+[source,json]
+----
+{
+  "version": "vexometer-efficacy-v1",
+  "satellite": "vex-lazy-eliminator",
+  "evaluation_date": "2026-01-24",
+  "sample_size": 500,
+  "metrics": {
+    "CII": {
+      "mean_reduction": 0.72,
+      "std_dev": 0.15,
+      "confidence": 0.95,
+      "p_value": 0.001
+    }
+  },
+  "methodology": "A/B testing with vexometer validation",
+  "traces_available": true
+}
+----
+
+See link:docs/efficacy-format.adoc[efficacy-format.adoc] for full specification.
+
+== Development Guide
+
+=== Creating a New Satellite
+
+1. *Use the template*:
++
+[source,bash]
+----
+gh repo create hyperpolymath/vex-YOUR-SATELLITE \
+  --template hyperpolymath/vex-satellite-template \
+  --public
+----
+
+2. *Follow RSR standards*:
+   * SPDX headers on all files
+   * ECOSYSTEM.scm, META.scm, STATE.scm
+   * SECURITY.md, CONTRIBUTING.adoc, CODE_OF_CONDUCT.md
+   * .well-known/ compliance
+
+3. *Implement core interface*:
+   * Input: LLM response text
+   * Output: Modified response with reduced irritation
+   * Optional: vexometer-trace-v1 before/after data
+
+4. *Validate efficacy*:
+   * Collect before/after traces
+   * Run statistical analysis
+   * Document in EFFICACY.adoc
+
+5. *Register here*:
+   * Add to satellite registry table
+   * Link to repository
+   * Update status
+
+=== Recommended Languages
+
+* *Rust* - Primary for most satellites (performance, safety)
+* *Ada/SPARK* - Formal verification where needed
+* *Elixir/OTP* - Orchestration, stateful services
+* *Haskell* - Pure logic, type-heavy reasoning
+
+*Avoid*: Python, JavaScript, Go per RSR language policy.
+
+=== Testing Standards
+
+All satellites must include:
+
+* Unit tests with ≥80% coverage
+* Integration tests with vexometer
+* Before/after trace samples (≥50 examples)
+* Statistical validation (p < 0.05)
+
+== Roadmap
+
+=== Phase 1: Proof of Concept (Q1 2026)
+
+* [x] Create vexometer-satellites umbrella repo
+* [ ] Implement vex-lazy-eliminator (CII reduction)
+* [ ] Validate efficacy with 500+ test cases
+* [ ] Document integration protocol
+
+=== Phase 2: Core Satellites (Q2 2026)
+
+* [ ] Implement vex-hallucination-guard (EFR reduction)
+* [ ] Implement vex-sycophancy-shield (LPS/EFR reduction)
+* [ ] Implement vex-confidence-calibrator (EFR reduction)
+* [ ] Cross-satellite integration testing
+
+=== Phase 3: Ecosystem Expansion (Q3 2026)
+
+* [ ] Implement remaining 8 satellites
+* [ ] LMSYS Arena integration proposal
+* [ ] Public efficacy benchmark suite
+* [ ] Research paper publication
+
+=== Phase 4: Production Readiness (Q4 2026)
+
+* [ ] All 12 satellites operational
+* [ ] API service deployment
+* [ ] Model vendor partnerships
+* [ ] Community contribution program
+
+== Contributing
+
+Contributions welcome! See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc].
+
+Priority areas:
+
+1. Implementing planned satellites
+2. Efficacy validation datasets
+3. Integration protocol improvements
+4. Documentation enhancements
+
+== Resources
+
+* link:https://github.com/hyperpolymath/vexometer[Vexometer (main diagnostic instrument)]
+* link:https://github.com/hyperpolymath/vex-satellite-template[Satellite Template Repository]
+* link:docs/architecture.adoc[Architecture Details]
+* link:docs/integration.adoc[Integration Guide]
+* link:docs/research.adoc[Research Background]
+
+== License
+
+AGPL-3.0-or-later. See link:LICENSE[LICENSE].
+
+Individual satellites may use different licenses (check each satellite's LICENSE file).
+
+---
+
+*Vexometer measures irritation. Satellites fix it.*

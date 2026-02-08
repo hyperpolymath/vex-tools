@@ -1,0 +1,95 @@
+.\" SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+.\" Man page for vext-send
+.TH VEXT-SEND 1 "December 2025" "vext 1.0.0" "User Commands"
+.SH NAME
+vext-send \- send notifications to vextd daemon
+.SH SYNOPSIS
+.B vext-send
+[\fIOPTIONS\fR] \fIMESSAGE\fR
+.SH DESCRIPTION
+.B vext-send
+is a command-line utility to send notifications to a running vextd daemon.
+It formats and sends JSON notifications via UDP.
+.SH OPTIONS
+.TP
+.BR \-s ", " \-\-server =\fIADDRESS\fR
+vextd server address (default: 127.0.0.1:6659)
+.TP
+.BR \-t ", " \-\-to =\fITARGET\fR
+IRC target URL (can be specified multiple times)
+.TP
+.BR \-p ", " \-\-project =\fINAME\fR
+Project name
+.TP
+.BR \-b ", " \-\-branch =\fINAME\fR
+Branch name
+.TP
+.BR \-c ", " \-\-commit =\fIHASH\fR
+Commit hash
+.TP
+.BR \-a ", " \-\-author =\fINAME\fR
+Author name
+.TP
+.BR \-u ", " \-\-url =\fIURL\fR
+URL to include
+.TP
+.BR \-h ", " \-\-help
+Print help message and exit
+.TP
+.BR \-V ", " \-\-version
+Print version information and exit
+.SH ENVIRONMENT
+.TP
+.B VEXT_SERVER
+Default vextd server address
+.TP
+.B VEXT_TARGETS
+Comma-separated default IRC targets
+.TP
+.B VEXT_PROJECT
+Default project name
+.SH EXAMPLES
+.PP
+Send a simple message:
+.RS
+.nf
+vext-send -t irc://irc.libera.chat/#vext "Hello, world!"
+.fi
+.RE
+.PP
+Send a commit notification:
+.RS
+.nf
+vext-send -t irc://irc.libera.chat/#vext \\
+  -p myproject -b main -c abc1234 \\
+  -a "John Doe" "Fixed bug in parser"
+.fi
+.RE
+.PP
+Send to multiple channels:
+.RS
+.nf
+vext-send -t irc://irc.libera.chat/#dev \\
+  -t irc://irc.libera.chat/#commits \\
+  "New release v1.0.0"
+.fi
+.RE
+.SH EXIT STATUS
+.TP
+.B 0
+Success
+.TP
+.B 1
+Failed to send notification
+.TP
+.B 2
+Invalid arguments
+.SH SEE ALSO
+.BR vextd (1)
+.SH BUGS
+Report bugs at: https://github.com/hyperpolymath/vext/issues
+.SH AUTHOR
+Hyperpolymath <https://github.com/hyperpolymath>
+.SH COPYRIGHT
+Copyright \(co 2025 Vext Contributors.
+License: MIT OR AGPL-3.0-or-later.

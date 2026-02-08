@@ -1,0 +1,112 @@
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Contributing to vex-lazy-eliminator
+:toc:
+
+== Welcome
+
+Thank you for contributing! This satellite is part of the vexometer ecosystem.
+
+== How to Contribute
+
+=== 1. Set Up Development Environment
+
+[source,bash]
+----
+# Clone the repository
+git clone https://github.com/hyperpolymath/vex-lazy-eliminator
+cd vex-lazy-eliminator
+
+# Build
+just build
+
+# Run tests
+just test
+
+# Check code quality
+just check
+----
+
+=== 2. Areas for Contribution
+
+[cols="2,3,2", options="header"]
+|===
+|Area |Examples |Difficulty
+
+|Pattern Refinement
+|Improve detection accuracy, add new patterns
+|Easy
+
+|Language Support
+|Add C++, C#, Swift, etc.
+|Medium
+
+|Efficacy Validation
+|Collect before/after traces, statistical analysis
+|Medium
+
+|Performance
+|Optimize AST traversal, parallel processing
+|Hard
+
+|Integration
+|CI/CD plugins, IDE extensions
+|Medium
+|===
+
+=== 3. Code Standards
+
+* **Rust style**: Use `cargo fmt` and `cargo clippy`
+* **SPDX headers**: All files must have `// SPDX-License-Identifier: AGPL-3.0-or-later`
+* **Tests**: Add tests for new features
+* **Documentation**: rustdoc comments for public APIs
+
+=== 4. Pull Request Process
+
+1. Fork the repository
+2. Create a branch: `git checkout -b improve-python-detection`
+3. Make changes with SPDX headers
+4. Run `just check` and `just test`
+5. Commit with conventional commits:
++
+[source]
+----
+feat: add support for Python walrus operator
+fix: reduce false positives for empty blocks
+docs: update README with new examples
+----
+6. Submit PR with clear description
+
+=== 5. Pattern Contribution Guidelines
+
+When adding new incompleteness patterns:
+
+1. **Provide examples**: Show code that should be detected
+2. **Test false positives**: Ensure legitimate code isn't flagged
+3. **Severity justification**: Explain severity score assignment
+4. **Multi-language**: Consider if pattern applies to other languages
+
+Example PR:
+
+[source]
+----
+feat: detect Python ... in type annotations
+
+Adds detection for ellipsis (...) in type stubs:
+
+    def foo() -> int: ...
+
+Severity: 0.8 (PlaceholderText)
+Applies to: Python only
+False positive rate: <1% (tested on 1000 files)
+----
+
+== Community
+
+* **Questions**: Open a GitHub Discussion
+* **Bugs**: Open an issue with `bug` label
+* **Features**: Open an issue with `enhancement` label
+
+## License
+
+By contributing, you agree that your contributions will be licensed under AGPL-3.0-or-later.

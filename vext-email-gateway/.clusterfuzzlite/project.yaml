@@ -1,0 +1,6 @@
+homepage: "https://github.com/hyperpolymath/vext-email-gateway"
+language: rust
+main_repo: "https://github.com/hyperpolymath/vext-email-gateway"
+sanitizers:
+  - address
+  - undefined

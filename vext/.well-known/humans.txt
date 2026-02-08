@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# humanstxt.org - vext contributors
+# Last updated: 2025-12-30
+
+/* TEAM */
+Maintainer: Hyperpolymath
+Site: https://github.com/hyperpolymath
+GitHub: @hyperpolymath
+Location: Earth
+
+/* THANKS */
+Name: Eric S. Raymond
+Role: Original irker author
+URL: https://gitlab.com/esr/irker
+
+Name: Rust Community
+Role: Ecosystem and tooling
+
+Name: Tokio Contributors
+Role: Async runtime
+
+/* SITE */
+Software: vext
+Version: 1.0.0
+Standards: RFC 1459 (IRC), RFC 9116 (security.txt)
+Language: Rust, ReScript
+Doctype: AsciiDoc, Markdown
+Components: vextd (daemon), vext-send (CLI), vext-hook (git hook)
+License: MIT OR AGPL-3.0-or-later
+Repository: https://github.com/hyperpolymath/vext

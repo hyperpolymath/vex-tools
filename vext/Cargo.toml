@@ -1,0 +1,34 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# vext - IRC notification daemon (Rhodium Standard Edition)
+
+[workspace]
+resolver = "2"
+members = [
+    "vext-core",
+]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.70"
+authors = ["Vext Contributors"]
+license = "MIT OR AGPL-3.0-or-later"
+repository = "https://github.com/Hyperpolymath/vext"
+
+[workspace.dependencies]
+tokio = { version = "1.35", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+anyhow = "1.0"
+thiserror = "1.0"
+clap = { version = "4.4", features = ["derive", "env"] }
+
+[workspace.dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

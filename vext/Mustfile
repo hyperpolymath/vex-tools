@@ -1,0 +1,253 @@
+# SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+# Mustfile - Required conditions and invariants for vext
+# Companion to justfile - defines what MUST be true
+# See: https://github.com/hyperpolymath/mustfile
+
+# ══════════════════════════════════════════════════════════════════════════════
+# COOKBOOK
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# Mustfile vs Justfile:
+#   - Justfile: "just build" - runs a build command
+#   - Mustfile: "must build" - verifies build requirements are met
+#
+# Usage:
+#   must check          # Run all must conditions
+#   must <condition>    # Check specific condition
+#   must --list         # List all conditions
+#
+# Conditions return exit 0 (pass) or exit 1 (fail)
+#
+# Integration with justfile:
+#   In justfile, add: must check && just build
+#
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Default: check all conditions
+default:
+    @echo "Checking all must conditions..."
+    @must rust-version
+    @must deno-version
+    @must no-banned-languages
+    @must spdx-headers
+    @must no-secrets
+    @echo "✅ All must conditions passed"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# LANGUAGE POLICY
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Must have Rust 1.70+
+rust-version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    version=$(rustc --version | grep -oP '\d+\.\d+' | head -1)
+    major=$(echo $version | cut -d. -f1)
+    minor=$(echo $version | cut -d. -f2)
+    if [[ $major -lt 1 ]] || [[ $major -eq 1 && $minor -lt 70 ]]; then
+        echo "❌ Rust version must be >= 1.70 (found: $version)"
+        exit 1
+    fi
+    echo "✓ Rust version: $version"
+
+# Must have Deno 2.0+
+deno-version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! command -v deno &> /dev/null; then
+        echo "❌ Deno not installed"
+        exit 1
+    fi
+    version=$(deno --version | head -1 | grep -oP '\d+\.\d+' | head -1)
+    major=$(echo $version | cut -d. -f1)
+    if [[ $major -lt 2 ]]; then
+        echo "❌ Deno version must be >= 2.0 (found: $version)"
+        exit 1
+    fi
+    echo "✓ Deno version: $version"
+
+# Must not contain banned languages (Python, Go, TypeScript in wrong places)
+no-banned-languages:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    errors=0
+
+    # Check for Python files (not allowed in vext)
+    if find . -name "*.py" -not -path "./.git/*" -not -path "./target/*" | grep -q .; then
+        echo "❌ Python files found (banned per RSR)"
+        errors=$((errors + 1))
+    fi
+
+    # Check for Go files (not allowed anywhere)
+    if find . -name "*.go" -not -path "./.git/*" -not -path "./target/*" | grep -q .; then
+        echo "❌ Go files found (banned per RSR)"
+        errors=$((errors + 1))
+    fi
+
+    # Check for TypeScript (should be ReScript)
+    if find . -name "*.ts" -not -path "./.git/*" -not -path "./target/*" -not -path "./node_modules/*" | grep -q .; then
+        echo "⚠️  TypeScript files found (should be ReScript)"
+        # Warning only during migration
+    fi
+
+    if [[ $errors -gt 0 ]]; then
+        exit 1
+    fi
+    echo "✓ No banned languages"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CODE QUALITY
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Must have SPDX headers on source files
+spdx-headers:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    missing=0
+
+    for file in $(find . -name "*.rs" -not -path "./target/*"); do
+        if ! head -5 "$file" | grep -q "SPDX-License-Identifier"; then
+            echo "❌ Missing SPDX header: $file"
+            missing=$((missing + 1))
+        fi
+    done
+
+    if [[ $missing -gt 0 ]]; then
+        echo "❌ $missing files missing SPDX headers"
+        exit 1
+    fi
+    echo "✓ All source files have SPDX headers"
+
+# Must not contain hardcoded secrets
+no-secrets:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Check for common secret patterns
+    if grep -rE "(password|secret|api_key|token)\s*=\s*['\"][^'\"]+['\"]" \
+        --include="*.rs" --include="*.toml" --include="*.json" \
+        . 2>/dev/null | grep -v "example" | grep -v "test" | grep -q .; then
+        echo "❌ Potential hardcoded secrets found"
+        exit 1
+    fi
+    echo "✓ No hardcoded secrets detected"
+
+# Must pass Rust tests
+tests-pass:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! cargo test --quiet 2>/dev/null; then
+        echo "❌ Rust tests failed"
+        exit 1
+    fi
+    echo "✓ All tests pass"
+
+# Must have no clippy warnings (pedantic)
+clippy-clean:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! cargo clippy -- -D warnings 2>/dev/null; then
+        echo "❌ Clippy warnings found"
+        exit 1
+    fi
+    echo "✓ Clippy clean"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DOCUMENTATION
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Must have required documentation files
+docs-present:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    required=("README.adoc" "LICENSE" "CONTRIBUTING.md" "SECURITY.md" "CHANGELOG.md")
+    missing=0
+
+    for doc in "${required[@]}"; do
+        if [[ ! -f "$doc" ]]; then
+            echo "❌ Missing: $doc"
+            missing=$((missing + 1))
+        fi
+    done
+
+    if [[ $missing -gt 0 ]]; then
+        exit 1
+    fi
+    echo "✓ All required documentation present"
+
+# Must have all 6 SCM files
+scm-files:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    required=("STATE.scm" "META.scm" "ECOSYSTEM.scm" "PLAYBOOK.scm" "AGENTIC.scm" "NEUROSYM.scm")
+    missing=0
+
+    for scm in "${required[@]}"; do
+        if [[ ! -f "$scm" ]]; then
+            echo "❌ Missing: $scm"
+            missing=$((missing + 1))
+        fi
+    done
+
+    if [[ $missing -gt 0 ]]; then
+        exit 1
+    fi
+    echo "✓ All SCM files present"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECURITY
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Must have .well-known directory
+well-known:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    required=(".well-known/security.txt" ".well-known/ai.txt" ".well-known/humans.txt")
+    missing=0
+
+    for file in "${required[@]}"; do
+        if [[ ! -f "$file" ]]; then
+            echo "❌ Missing: $file"
+            missing=$((missing + 1))
+        fi
+    done
+
+    if [[ $missing -gt 0 ]]; then
+        exit 1
+    fi
+    echo "✓ .well-known directory complete"
+
+# Must pass cargo audit
+audit-clean:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if ! cargo audit 2>/dev/null; then
+        echo "❌ Security vulnerabilities found"
+        exit 1
+    fi
+    echo "✓ No known vulnerabilities"
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PRE-COMMIT
+# ══════════════════════════════════════════════════════════════════════════════
+
+# All conditions that must pass before commit
+pre-commit:
+    @must no-banned-languages
+    @must spdx-headers
+    @must no-secrets
+    @must tests-pass
+    @echo "✅ Pre-commit checks passed"
+
+# All conditions for CI
+ci:
+    @must rust-version
+    @must deno-version
+    @must no-banned-languages
+    @must spdx-headers
+    @must no-secrets
+    @must tests-pass
+    @must docs-present
+    @must scm-files
+    @must well-known
+    @echo "✅ CI checks passed"

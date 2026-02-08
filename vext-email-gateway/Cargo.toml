@@ -1,0 +1,70 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Vext Email Gateway - Production-grade, formally verified where possible
+
+[package]
+name = "vext-email-gateway"
+version = "0.1.0"
+edition = "2021"
+authors = ["Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>"]
+license = "PMPL-1.0-or-later"
+description = "Email gateway for Vext protocol - production-grade with formal verification"
+
+[dependencies]
+# Async runtime (proven, production-grade)
+tokio = { version = "1.35", features = ["full"] }
+
+# Email handling (proven libraries)
+lettre = "0.11"           # SMTP client (mature, widely used)
+mailparse = "0.14"        # Email parsing (battle-tested)
+mail-parser = "0.9"       # Alternative parser (defensive depth)
+
+# Cryptography (formally verified)
+ed25519-dalek = "2.1"     # Ed25519 signatures (formally verified)
+sha2 = "0.10"             # SHA-256 (NIST standard)
+blake3 = "1.5"            # BLAKE3 (faster, also secure)
+
+# Serialization (proven)
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# Database (proven, ACID-compliant)
+sqlx = { version = "0.7", features = ["runtime-tokio", "sqlite", "macros"] }
+
+# Error handling (proven patterns)
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging (proven)
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+# Time handling (proven)
+chrono = "0.4"
+
+# Validation (defensive)
+validator = { version = "0.18", features = ["derive"] }
+
+# Rate limiting (proven algorithm)
+governor = "0.6"
+
+[dev-dependencies]
+# Property-based testing (find edge cases)
+proptest = "1.4"
+
+# Fuzzing
+cargo-fuzz = "0.11"
+
+# Formal verification
+kani-verifier = "0.40"
+
+[profile.release]
+# Maximum safety checks even in release
+overflow-checks = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+# Overflow checks in development
+overflow-checks = true

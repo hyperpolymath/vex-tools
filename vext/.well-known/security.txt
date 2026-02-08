@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# RFC 9116 compliant security.txt for vext
+# https://securitytxt.org/
+
+Contact: https://github.com/hyperpolymath/vext/security/advisories/new
+Contact: mailto:security@hyperpolymath.dev
+Expires: 2026-12-31T23:59:59.000Z
+Encryption: https://github.com/hyperpolymath.gpg
+Acknowledgments: https://github.com/hyperpolymath/vext/blob/main/SECURITY_CREDITS.md
+Preferred-Languages: en
+Canonical: https://raw.githubusercontent.com/hyperpolymath/vext/main/.well-known/security.txt
+Policy: https://github.com/hyperpolymath/vext/blob/main/SECURITY.md
+Hiring: https://github.com/hyperpolymath

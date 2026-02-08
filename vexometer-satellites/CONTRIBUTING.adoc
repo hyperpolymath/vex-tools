@@ -1,0 +1,176 @@
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
+// SPDX-License-Identifier: PMPL-1.0-or-later
+= Contributing to Vexometer Satellites
+:toc:
+
+== Overview
+
+This umbrella repository coordinates the vexometer satellite ecosystem. Contributions fall into three categories:
+
+1. **Documentation improvements** (this repo)
+2. **Protocol enhancements** (this repo)
+3. **Satellite implementations** (individual satellite repos)
+
+== Contributing to This Repository
+
+=== What to Contribute
+
+[cols="2,3,2", options="header"]
+|===
+|Category |Examples |Review Required
+
+|Documentation
+|Fix typos, clarify protocols, improve examples
+|Standard PR review
+
+|Satellite Registry
+|Add new satellite, update status, fix links
+|Maintainer approval required
+
+|Protocol Changes
+|Modify vexometer-trace-v1 or efficacy-v1 schemas
+|Requires vexometer team approval
+
+|Tooling
+|Validation scripts, CI improvements, automation
+|Standard PR review
+|===
+
+=== How to Contribute
+
+1. **Fork** this repository
+2. **Create a branch**: `git checkout -b improve-docs`
+3. **Make changes**:
+   - Add SPDX headers: `// SPDX-License-Identifier: AGPL-3.0-or-later`
+   - Use AsciiDoc for documentation
+   - Validate JSON schemas if modifying protocols
+4. **Test locally**:
++
+[source,bash]
+----
+just check  # Runs linters and validators
+----
+5. **Submit PR** with clear description
+
+=== Code Standards
+
+* **AsciiDoc**: Use for all documentation (not Markdown)
+* **SPDX Headers**: All files must have license headers
+* **Links**: Verify all external links work
+* **Status Accuracy**: Satellite registry must reflect actual repo state
+
+=== Commit Messages
+
+Use conventional commits:
+
+[source]
+----
+docs: fix typo in integration protocol
+feat: add vex-lazy-eliminator to registry
+chore: update satellite status badges
+----
+
+== Contributing New Satellites
+
+To create a new satellite:
+
+1. **Use the template**:
++
+[source,bash]
+----
+gh repo create hyperpolymath/vex-YOUR-SATELLITE \
+  --template hyperpolymath/vex-satellite-template \
+  --public
+----
+
+2. **Implement the intervention**:
+   - Choose appropriate language (Rust, Ada, Haskell, Elixir)
+   - Follow RSR standards
+   - Include comprehensive tests
+
+3. **Validate efficacy**:
+   - Collect ≥50 before/after traces
+   - Run statistical analysis (p < 0.05)
+   - Document in EFFICACY.adoc
+
+4. **Register here**:
+   - Add entry to satellite registry table in README.adoc
+   - Include: name, status (🚧), metrics reduced, description, language
+   - Link to your repository
+   - Submit PR to this repo
+
+=== Satellite Requirements
+
+All satellites must:
+
+* ✅ Use RSR-compliant structure
+* ✅ Include SECURITY.md, CONTRIBUTING.adoc, CODE_OF_CONDUCT.md
+* ✅ Pass OpenSSF Scorecard checks
+* ✅ Use memory-safe language (no Python, JavaScript, Go)
+* ✅ Include unit tests (≥80% coverage)
+* ✅ Provide before/after traces in vexometer-trace-v1 format
+* ✅ Document efficacy with statistical validation
+
+See link:docs/satellite-checklist.adoc[satellite-checklist.adoc] for full requirements.
+
+== Protocol Change Process
+
+Changes to integration protocols (vexometer-trace-v1, vexometer-efficacy-v1) require:
+
+1. **Discussion**: Open issue describing proposed change
+2. **Consensus**: Agreement from vexometer maintainers + ≥2 satellite maintainers
+3. **Version bump**: Create new protocol version (don't break existing)
+4. **Documentation**: Update specs in docs/
+5. **Implementation**: Update vexometer validation tooling
+6. **Migration period**: Support old version for ≥6 months
+
+== Review Process
+
+=== Documentation PRs
+
+* Reviewed by any maintainer
+* Merged within 1 week
+* Focus: accuracy, clarity, links work
+
+=== Satellite Registry PRs
+
+* Reviewed by maintainer
+* Verification required:
+  - Repository exists
+  - Meets satellite requirements
+  - CI passing
+  - SECURITY.md present
+* Merged within 2 weeks
+
+=== Protocol Change PRs
+
+* Reviewed by vexometer team + satellite maintainers
+* Requires consensus (may take 1+ months)
+* Backwards compatibility required
+
+== Community Standards
+
+All contributors must follow:
+
+* link:CODE_OF_CONDUCT.md[Code of Conduct]
+* link:GOVERNANCE.md[Governance Model]
+* link:https://github.com/hyperpolymath/rhodium-standard-repositories[RSR Standards]
+
+== Getting Help
+
+* **Questions**: Open a GitHub Discussion
+* **Bug reports**: Open an issue with `bug` label
+* **Feature requests**: Open an issue with `enhancement` label
+* **Chat**: Join #vexometer on our Discord (link TBD)
+
+== Recognition
+
+Contributors will be:
+
+* Listed in CONTRIBUTORS.md
+* Credited in release notes
+* Acknowledged in research papers (if substantial contribution)
+
+---
+
+Thank you for contributing to the vexometer satellite ecosystem!
