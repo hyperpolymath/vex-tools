@@ -5,6 +5,9 @@ target/
 *.ali
 *.exe
 
+# Crash capture artifacts
+ai-cli-crash-capture/
+
 # Editor files
 .vscode/
 .idea/
