@@ -1,15 +1,24 @@
-||| Foreign Function Interface Declarations
-|||
-||| This module declares all C-compatible functions that will be
-||| implemented in the Zig FFI layer.
-|||
-||| All functions are declared here with type signatures and safety proofs.
-||| Implementations live in ffi/zig/
+-- SPDX-License-Identifier: PMPL-1.0-or-later
+-- Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
+--
+-- Lazy-Eliminator Foreign Function Interface Declarations
+--
+-- NOTE: This Foreign.idr needs per-component customization for the
+-- lazy-eliminator satellite. It should define FFI functions for:
+--   - lazy_eliminator_init / lazy_eliminator_free
+--   - lazy_eliminator_scan_file (detect incomplete code patterns)
+--   - lazy_eliminator_get_detections (retrieve detection results)
+--
+-- The Rust implementation provides the analysis engine; this Idris2
+-- module declares the C-compatible interface for external consumers.
+--
+-- TODO: Replace with lazy-eliminator-specific types matching
+-- IncompletenessKind, Language, and DetectionFFI from Types.idr.
 
-module {{PROJECT}}.ABI.Foreign
+module LazyEliminator.ABI.Foreign
 
-import {{PROJECT}}.ABI.Types
-import {{PROJECT}}.ABI.Layout
+import LazyEliminator.ABI.Types
+import LazyEliminator.ABI.Layout
 
 %default total
 
@@ -17,10 +26,10 @@ import {{PROJECT}}.ABI.Layout
 -- Library Lifecycle
 --------------------------------------------------------------------------------
 
-||| Initialize the library
+||| Initialize the lazy-eliminator library
 ||| Returns a handle to the library instance, or Nothing on failure
 export
-%foreign "C:{{project}}_init, lib{{project}}"
+%foreign "C:lazy_eliminator_init, liblazy_eliminator"
 prim__init : PrimIO Bits64
 
 ||| Safe wrapper for library initialization
@@ -32,7 +41,7 @@ init = do
 
 ||| Clean up library resources
 export
-%foreign "C:{{project}}_free, lib{{project}}"
+%foreign "C:lazy_eliminator_free, liblazy_eliminator"
 prim__free : Bits64 -> PrimIO ()
 
 ||| Safe wrapper for cleanup
@@ -41,12 +50,12 @@ free : Handle -> IO ()
 free h = primIO (prim__free (handlePtr h))
 
 --------------------------------------------------------------------------------
--- Core Operations
+-- Core Operations (placeholder — needs lazy-eliminator customization)
 --------------------------------------------------------------------------------
 
-||| Example operation: process data
+||| Scan a file for incompleteness patterns
 export
-%foreign "C:{{project}}_process, lib{{project}}"
+%foreign "C:lazy_eliminator_process, liblazy_eliminator"
 prim__process : Bits64 -> Bits32 -> PrimIO Bits32
 
 ||| Safe wrapper with error handling
@@ -59,159 +68,22 @@ process h input = do
     n => Right n
 
 --------------------------------------------------------------------------------
--- String Operations
---------------------------------------------------------------------------------
-
-||| Convert C string to Idris String
-export
-%foreign "support:idris2_getString, libidris2_support"
-prim__getString : Bits64 -> String
-
-||| Free C string
-export
-%foreign "C:{{project}}_free_string, lib{{project}}"
-prim__freeString : Bits64 -> PrimIO ()
-
-||| Get string result from library
-export
-%foreign "C:{{project}}_get_string, lib{{project}}"
-prim__getResult : Bits64 -> PrimIO Bits64
-
-||| Safe string getter
-export
-getString : Handle -> IO (Maybe String)
-getString h = do
-  ptr <- primIO (prim__getResult (handlePtr h))
-  if ptr == 0
-    then pure Nothing
-    else do
-      let str = prim__getString ptr
-      primIO (prim__freeString ptr)
-      pure (Just str)
-
---------------------------------------------------------------------------------
--- Array/Buffer Operations
---------------------------------------------------------------------------------
-
-||| Process array data
-export
-%foreign "C:{{project}}_process_array, lib{{project}}"
-prim__processArray : Bits64 -> Bits64 -> Bits32 -> PrimIO Bits32
-
-||| Safe array processor
-export
-processArray : Handle -> (buffer : Bits64) -> (len : Bits32) -> IO (Either Result ())
-processArray h buf len = do
-  result <- primIO (prim__processArray (handlePtr h) buf len)
-  pure $ case resultFromInt result of
-    Just Ok => Right ()
-    Just err => Left err
-    Nothing => Left Error
-  where
-    resultFromInt : Bits32 -> Maybe Result
-    resultFromInt 0 = Just Ok
-    resultFromInt 1 = Just Error
-    resultFromInt 2 = Just InvalidParam
-    resultFromInt 3 = Just OutOfMemory
-    resultFromInt 4 = Just NullPointer
-    resultFromInt _ = Nothing
-
---------------------------------------------------------------------------------
--- Error Handling
---------------------------------------------------------------------------------
-
-||| Get last error message
-export
-%foreign "C:{{project}}_last_error, lib{{project}}"
-prim__lastError : PrimIO Bits64
-
-||| Retrieve last error as string
-export
-lastError : IO (Maybe String)
-lastError = do
-  ptr <- primIO prim__lastError
-  if ptr == 0
-    then pure Nothing
-    else pure (Just (prim__getString ptr))
-
-||| Get error description for result code
-export
-errorDescription : Result -> String
-errorDescription Ok = "Success"
-errorDescription Error = "Generic error"
-errorDescription InvalidParam = "Invalid parameter"
-errorDescription OutOfMemory = "Out of memory"
-errorDescription NullPointer = "Null pointer"
-
---------------------------------------------------------------------------------
 -- Version Information
 --------------------------------------------------------------------------------
 
 ||| Get library version
 export
-%foreign "C:{{project}}_version, lib{{project}}"
+%foreign "C:lazy_eliminator_version, liblazy_eliminator"
 prim__version : PrimIO Bits64
 
 ||| Get version as string
+export
+%foreign "support:idris2_getString, libidris2_support"
+prim__getString : Bits64 -> String
+
+||| Get version string
 export
 version : IO String
 version = do
   ptr <- primIO prim__version
   pure (prim__getString ptr)
-
-||| Get library build info
-export
-%foreign "C:{{project}}_build_info, lib{{project}}"
-prim__buildInfo : PrimIO Bits64
-
-||| Get build information
-export
-buildInfo : IO String
-buildInfo = do
-  ptr <- primIO prim__buildInfo
-  pure (prim__getString ptr)
-
---------------------------------------------------------------------------------
--- Callback Support
---------------------------------------------------------------------------------
-
-||| Callback function type (C ABI)
-public export
-Callback : Type
-Callback = Bits64 -> Bits32 -> Bits32
-
-||| Register a callback
-export
-%foreign "C:{{project}}_register_callback, lib{{project}}"
-prim__registerCallback : Bits64 -> AnyPtr -> PrimIO Bits32
-
-||| Safe callback registration
-export
-registerCallback : Handle -> Callback -> IO (Either Result ())
-registerCallback h cb = do
--- PROOF_TODO: Replace believe_me with actual proof
-  result <- primIO (prim__registerCallback (handlePtr h) (believe_me cb))
-  pure $ case resultFromInt result of
-    Just Ok => Right ()
-    Just err => Left err
-    Nothing => Left Error
-  where
-    resultFromInt : Bits32 -> Maybe Result
-    resultFromInt 0 = Just Ok
-    resultFromInt _ = Just Error
-
---------------------------------------------------------------------------------
--- Utility Functions
---------------------------------------------------------------------------------
-
-||| Check if library is initialized
-export
-%foreign "C:{{project}}_is_initialized, lib{{project}}"
-prim__isInitialized : Bits64 -> PrimIO Bits32
-
-||| Check initialization status
-export
-isInitialized : Handle -> IO Bool
-isInitialized h = do
-  result <- primIO (prim__isInitialized (handlePtr h))
-  pure (result /= 0)

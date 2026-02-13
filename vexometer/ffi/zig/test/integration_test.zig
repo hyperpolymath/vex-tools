@@ -1,182 +1,169 @@
-// {{PROJECT}} Integration Tests
 // SPDX-License-Identifier: PMPL-1.0-or-later
+// Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath) <jonathan.jewell@open.ac.uk>
 //
-// These tests verify that the Zig FFI correctly implements the Idris2 ABI
+// Vexometer FFI Integration Tests
+//
+// These tests verify that the Zig FFI correctly implements the interface
+// declared in src/abi/Foreign.idr. They test the exported C-ABI functions
+// as an external consumer would use them.
 
 const std = @import("std");
 const testing = std.testing;
 
-// Import FFI functions
-extern fn {{project}}_init() ?*opaque {};
-extern fn {{project}}_free(?*opaque {}) void;
-extern fn {{project}}_process(?*opaque {}, u32) c_int;
-extern fn {{project}}_get_string(?*opaque {}) ?[*:0]const u8;
-extern fn {{project}}_free_string(?[*:0]const u8) void;
-extern fn {{project}}_last_error() ?[*:0]const u8;
-extern fn {{project}}_version() [*:0]const u8;
-extern fn {{project}}_is_initialized(?*opaque {}) u32;
+// Import the FFI functions via C linkage (as an external consumer would)
+extern fn vexometer_init() callconv(.C) i32;
+extern fn vexometer_free(handle: i32) callconv(.C) void;
+extern fn vexometer_metric_count() callconv(.C) i32;
+extern fn vexometer_analyze(handle: i32, prompt: [*:0]const u8, response: [*:0]const u8) callconv(.C) i32;
+extern fn vexometer_get_isa_score(handle: i32) callconv(.C) i32;
+extern fn vexometer_get_category_score(handle: i32, category: i32) callconv(.C) i32;
+extern fn vexometer_finding_count(handle: i32) callconv(.C) i32;
 
-//==============================================================================
+// =============================================================================
 // Lifecycle Tests
-//==============================================================================
+// =============================================================================
 
-test "create and destroy handle" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
-
-    try testing.expect(handle != null);
+test "integration: create and destroy session" {
+    const handle = vexometer_init();
+    try testing.expect(handle > 0);
+    vexometer_free(handle);
 }
 
-test "handle is initialized" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
+test "integration: multiple sessions are independent" {
+    const h1 = vexometer_init();
+    try testing.expect(h1 > 0);
 
-    const initialized = {{project}}_is_initialized(handle);
-    try testing.expectEqual(@as(u32, 1), initialized);
-}
-
-test "null handle is not initialized" {
-    const initialized = {{project}}_is_initialized(null);
-    try testing.expectEqual(@as(u32, 0), initialized);
-}
-
-//==============================================================================
-// Operation Tests
-//==============================================================================
-
-test "process with valid handle" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
-
-    const result = {{project}}_process(handle, 42);
-    try testing.expectEqual(@as(c_int, 0), result); // 0 = ok
-}
-
-test "process with null handle returns error" {
-    const result = {{project}}_process(null, 42);
-    try testing.expectEqual(@as(c_int, 4), result); // 4 = null_pointer
-}
-
-//==============================================================================
-// String Tests
-//==============================================================================
-
-test "get string result" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
-
-    const str = {{project}}_get_string(handle);
-    defer if (str) |s| {{project}}_free_string(s);
-
-    try testing.expect(str != null);
-}
-
-test "get string with null handle" {
-    const str = {{project}}_get_string(null);
-    try testing.expect(str == null);
-}
-
-//==============================================================================
-// Error Handling Tests
-//==============================================================================
-
-test "last error after null handle operation" {
-    _ = {{project}}_process(null, 0);
-
-    const err = {{project}}_last_error();
-    try testing.expect(err != null);
-
-    if (err) |e| {
-        const err_str = std.mem.span(e);
-        try testing.expect(err_str.len > 0);
-    }
-}
-
-test "no error after successful operation" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
-
-    _ = {{project}}_process(handle, 0);
-
-    // Error should be cleared after successful operation
-    // (This depends on implementation)
-}
-
-//==============================================================================
-// Version Tests
-//==============================================================================
-
-test "version string is not empty" {
-    const ver = {{project}}_version();
-    const ver_str = std.mem.span(ver);
-
-    try testing.expect(ver_str.len > 0);
-}
-
-test "version string is semantic version format" {
-    const ver = {{project}}_version();
-    const ver_str = std.mem.span(ver);
-
-    // Should be in format X.Y.Z
-    try testing.expect(std.mem.count(u8, ver_str, ".") >= 1);
-}
-
-//==============================================================================
-// Memory Safety Tests
-//==============================================================================
-
-test "multiple handles are independent" {
-    const h1 = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(h1);
-
-    const h2 = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(h2);
-
+    const h2 = vexometer_init();
+    try testing.expect(h2 > 0);
     try testing.expect(h1 != h2);
 
-    // Operations on h1 should not affect h2
-    _ = {{project}}_process(h1, 1);
-    _ = {{project}}_process(h2, 2);
+    // Freeing h1 should not affect h2
+    vexometer_free(h1);
+
+    // h2 should still be valid
+    const count = vexometer_finding_count(h2);
+    try testing.expect(count >= 0);
+
+    vexometer_free(h2);
 }
 
-test "double free is safe" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-
-    {{project}}_free(handle);
-    {{project}}_free(handle); // Should not crash
+test "integration: free invalid handle does not crash" {
+    vexometer_free(-1);
+    vexometer_free(0);
+    vexometer_free(99999);
 }
 
-test "free null is safe" {
-    {{project}}_free(null); // Should not crash
+test "integration: double free does not crash" {
+    const handle = vexometer_init();
+    vexometer_free(handle);
+    vexometer_free(handle);
 }
 
-//==============================================================================
-// Thread Safety Tests (if applicable)
-//==============================================================================
+// =============================================================================
+// Metric Count Tests
+// =============================================================================
 
-test "concurrent operations" {
-    const handle = {{project}}_init() orelse return error.InitFailed;
-    defer {{project}}_free(handle);
+test "integration: metric count is always 10" {
+    try testing.expectEqual(@as(i32, 10), vexometer_metric_count());
+}
 
-    const ThreadContext = struct {
-        h: *opaque {},
-        id: u32,
-    };
+// =============================================================================
+// Analysis Tests
+// =============================================================================
 
-    const thread_fn = struct {
-        fn run(ctx: ThreadContext) void {
-            _ = {{project}}_process(ctx.h, ctx.id);
-        }
-    }.run;
+test "integration: analyze with valid session" {
+    const handle = vexometer_init();
+    defer vexometer_free(handle);
 
-    var threads: [4]std.Thread = undefined;
-    for (&threads, 0..) |*thread, i| {
-        thread.* = try std.Thread.spawn(.{}, thread_fn, .{
-            ThreadContext{ .h = handle, .id = @intCast(i) },
-        });
+    const result = vexometer_analyze(handle, "What is the weather?", "The weather is sunny today.");
+    try testing.expect(result >= 0);
+}
+
+test "integration: analyze with invalid handle" {
+    const result = vexometer_analyze(-1, "prompt", "response");
+    try testing.expectEqual(@as(i32, -1), result);
+}
+
+// =============================================================================
+// Score Retrieval Tests
+// =============================================================================
+
+test "integration: ISA score for new session is zero" {
+    const handle = vexometer_init();
+    defer vexometer_free(handle);
+
+    const score = vexometer_get_isa_score(handle);
+    try testing.expectEqual(@as(i32, 0), score);
+}
+
+test "integration: ISA score for invalid handle returns -1" {
+    const score = vexometer_get_isa_score(-1);
+    try testing.expectEqual(@as(i32, -1), score);
+}
+
+test "integration: category scores for new session are all zero" {
+    const handle = vexometer_init();
+    defer vexometer_free(handle);
+
+    var cat: i32 = 0;
+    while (cat < 10) : (cat += 1) {
+        const score = vexometer_get_category_score(handle, cat);
+        try testing.expectEqual(@as(i32, 0), score);
     }
+}
 
-    for (threads) |thread| {
-        thread.join();
+test "integration: category score out of range returns -1" {
+    const handle = vexometer_init();
+    defer vexometer_free(handle);
+
+    try testing.expectEqual(@as(i32, -1), vexometer_get_category_score(handle, -1));
+    try testing.expectEqual(@as(i32, -1), vexometer_get_category_score(handle, 10));
+    try testing.expectEqual(@as(i32, -1), vexometer_get_category_score(handle, 255));
+}
+
+test "integration: category score for invalid handle returns -1" {
+    try testing.expectEqual(@as(i32, -1), vexometer_get_category_score(-1, 0));
+}
+
+// =============================================================================
+// Finding Count Tests
+// =============================================================================
+
+test "integration: finding count for new session is zero" {
+    const handle = vexometer_init();
+    defer vexometer_free(handle);
+
+    const count = vexometer_finding_count(handle);
+    try testing.expectEqual(@as(i32, 0), count);
+}
+
+test "integration: finding count for invalid handle returns -1" {
+    const count = vexometer_finding_count(-1);
+    try testing.expectEqual(@as(i32, -1), count);
+}
+
+// =============================================================================
+// End-to-End Workflow Test
+// =============================================================================
+
+test "integration: full analysis workflow" {
+    // 1. Create session
+    const handle = vexometer_init();
+    try testing.expect(handle > 0);
+    defer vexometer_free(handle);
+
+    // 2. Verify initial state
+    try testing.expectEqual(@as(i32, 0), vexometer_finding_count(handle));
+    try testing.expectEqual(@as(i32, 0), vexometer_get_isa_score(handle));
+
+    // 3. Run analysis (stub returns 0 findings)
+    const findings = vexometer_analyze(handle, "Explain quantum computing", "Quantum computing uses qubits.");
+    try testing.expect(findings >= 0);
+
+    // 4. Check all 10 categories are accessible
+    var cat: i32 = 0;
+    while (cat < 10) : (cat += 1) {
+        const score = vexometer_get_category_score(handle, cat);
+        try testing.expect(score >= 0);
     }
 }
