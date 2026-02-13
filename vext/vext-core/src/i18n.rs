@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 //! Internationalization (i18n) support for vext
 //!
 //! Provides multi-language support for vext messages and notifications

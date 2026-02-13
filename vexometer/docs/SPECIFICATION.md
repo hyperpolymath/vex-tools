@@ -4,7 +4,7 @@
 
 **Codename:** Vexometer
 **Author:** Jonathan D.A. Jewell
-**License:** AGPL-3.0-or-later
+**License:** PMPL-1.0-or-later
 **Language:** Ada 2022
 **GUI Toolkit:** GtkAda
 
@@ -246,7 +246,7 @@ alr test
 
 ## Contributing
 
-Contributions welcome under AGPL-3.0-or-later.
+Contributions welcome under PMPL-1.0-or-later.
 
 Priority areas:
 1. Additional pattern definitions
@@ -258,7 +258,7 @@ Priority areas:
 
 ## Licence
 
-AGPL-3.0-or-later
+PMPL-1.0-or-later
 
 This is free software; you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.

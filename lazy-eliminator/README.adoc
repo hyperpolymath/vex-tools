@@ -176,7 +176,7 @@ Benchmarked on M1 Mac (1000 Python files, ~100k LOC total):
 
 == License
 
-AGPL-3.0-or-later. See link:LICENSE[LICENSE].
+PMPL-1.0-or-later. See link:LICENSE[LICENSE].
 
 == Contributing
 

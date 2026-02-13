@@ -26,5 +26,5 @@ Standards: RFC 1459 (IRC), RFC 9116 (security.txt)
 Language: Rust, ReScript
 Doctype: AsciiDoc, Markdown
 Components: vextd (daemon), vext-send (CLI), vext-hook (git hook)
-License: MIT OR AGPL-3.0-or-later
+License: PMPL-1.0-or-later
 Repository: https://github.com/hyperpolymath/vext

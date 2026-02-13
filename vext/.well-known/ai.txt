@@ -23,7 +23,7 @@ Prohibited-Use: removing-attribution
 Prohibited-Use: relicensing
 
 # License
-License: MIT OR AGPL-3.0-or-later
+License: PMPL-1.0-or-later
 License-URL: https://github.com/hyperpolymath/vext/blob/main/LICENSE
 
 # Contact

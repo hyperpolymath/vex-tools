@@ -406,7 +406,7 @@ All satellites must follow:
 * *Build*: justfile over Makefile
 * *Package managers*: Alire (Ada), Cargo (Rust), Mix (Elixir), Cabal (Haskell)
 * *Standard*: RSR (Rhodium Standard Repository) compliance
-* *License*: AGPL-3.0-or-later
+* *License*: PMPL-1.0-or-later
 
 == See Also
 

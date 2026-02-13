@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 //! Vext - High-performance IRC notification daemon for version control systems
 //!
 //! This crate provides the core functionality for vext, including IRC client
