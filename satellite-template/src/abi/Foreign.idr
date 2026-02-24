@@ -7,7 +7,7 @@
 -- When creating a new satellite from this template, replace all
 -- placeholder names and add satellite-specific FFI declarations.
 --
--- IMPORTANT: Do NOT use believe_me for type casting. All type
+-- IMPORTANT: Do NOT use cast for type casting. All type
 -- conversions must use explicit, type-safe wrappers. See the
 -- vexometer/src/abi/Foreign.idr for a reference implementation.
 --

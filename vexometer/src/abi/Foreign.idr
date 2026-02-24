@@ -7,7 +7,7 @@
 -- The Zig FFI layer (ffi/zig/src/main.zig) implements these functions,
 -- bridging to the Ada analysis routines via C pragma conventions.
 --
--- No believe_me is used; all type conversions are explicit and safe.
+-- No cast is used; all type conversions are explicit and safe.
 
 module Vexometer.ABI.Foreign
 
