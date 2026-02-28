@@ -114,7 +114,7 @@ K9!
       description = "Add RSR-compliant workflows",
       commands = [
         # This would copy workflow templates
-        # In a real implementation, would fetch from rsr-template-repo
+        # In a real implementation, would fetch from vex-tools/satellite-template
         "echo '✓ Workflows configured'",
       ],
     },

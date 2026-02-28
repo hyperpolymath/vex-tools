@@ -17,11 +17,14 @@ tokio = { version = "1.35", features = ["full"] }
 lettre = "0.11"           # SMTP client (mature, widely used)
 mailparse = "0.14"        # Email parsing (battle-tested)
 mail-parser = "0.9"       # Alternative parser (defensive depth)
+async-trait = "0.1"
 
 # Cryptography (formally verified)
-ed25519-dalek = "2.1"     # Ed25519 signatures (formally verified)
+ed25519-dalek = { version = "2.1", features = ["rand_core"] }     # Ed25519 signatures (formally verified)
 sha2 = "0.10"             # SHA-256 (NIST standard)
 blake3 = "1.5"            # BLAKE3 (faster, also secure)
+hex = "0.4"
+rand = "0.8"
 
 # Serialization (proven)
 serde = { version = "1.0", features = ["derive"] }
@@ -40,7 +43,7 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 
 # Time handling (proven)
-chrono = "0.4"
+chrono = { version = "0.4", features = ["serde"] }
 
 # Validation (defensive)
 validator = { version = "0.18", features = ["derive"] }
@@ -52,11 +55,9 @@ governor = "0.6"
 # Property-based testing (find edge cases)
 proptest = "1.4"
 
-# Fuzzing
-cargo-fuzz = "0.11"
-
-# Formal verification
-kani-verifier = "0.40"
+[features]
+default = []
+kani = []
 
 [profile.release]
 # Maximum safety checks even in release

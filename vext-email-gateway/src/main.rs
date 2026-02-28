@@ -5,15 +5,15 @@
 mod types;
 
 use lettre::{
-    message::{header, Message as EmailMessage, SinglePart},
+    message::{header, Message as EmailMessage},
     transport::smtp::authentication::Credentials,
     SmtpTransport, Transport,
 };
-use mailparse::parse_mail;
-use std::collections::HashMap;
-use tokio::sync::RwLock;
+use mailparse::{parse_mail, MailHeaderMap};
 use std::sync::Arc;
-use tracing::{info, warn, error};
+use tokio::sync::RwLock;
+use tracing::{error, info, warn};
+use std::collections::HashMap;
 use types::*;
 
 /// Email gateway configuration
@@ -64,7 +64,7 @@ impl Gateway {
         );
 
         let smtp_transport = SmtpTransport::relay(&config.smtp_server)
-            .map_err(|e| VextError::Email(lettre::error::Error::Client(e)))?
+            .map_err(|e| VextError::InvalidEmail(e.to_string()))?
             .credentials(creds)
             .port(config.smtp_port)
             .build();
@@ -288,10 +288,15 @@ impl Gateway {
     }
 
     /// Get or create cryptographic identity for email address
-    fn get_or_create_identity(&self, email: &str) -> Result<ed25519_dalek::Keypair> {
+    fn get_or_create_identity(&self, _email: &str) -> Result<ed25519_dalek::SigningKey> {
+        use rand::RngCore;
+
         // TODO: Persistent storage of email → keypair mapping
-        // For now, generate new keypair (INSECURE - just for prototype)
-        Ok(ed25519_dalek::Keypair::generate(&mut rand::rngs::OsRng))
+        // For now, generate a new signing key (INSECURE - prototype only).
+        let mut rng = rand::rngs::OsRng;
+        let mut sk = [0u8; 32];
+        rng.fill_bytes(&mut sk);
+        Ok(ed25519_dalek::SigningKey::from_bytes(&sk))
     }
 }
 
@@ -339,7 +344,7 @@ async fn main() -> Result<()> {
     let vext_network = Arc::new(MockVextNetwork);
 
     // Create gateway
-    let gateway = Gateway::new(config, vext_network)?;
+    let _gateway = Gateway::new(config, vext_network)?;
 
     info!("Email gateway ready!");
 
@@ -352,8 +357,6 @@ async fn main() -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[tokio::test]
     async fn test_email_to_vext_message() {
         // TODO: Test email parsing and conversion to vext message

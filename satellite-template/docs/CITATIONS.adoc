@@ -1,36 +1,35 @@
-= RSR-template-repo - Citation Guide
+= ISA Satellite Template - Citation Guide
 :toc:
 
 == BibTeX
 
 [source,bibtex]
 ----
-@software{rsr-template-repo_2025,
+@software{isa_satellite_template_2026,
   author = {Polymath, Hyper},
-  title = {RSR-template-repo},
-  year = {2025},
-  url = {https://github.com/hyperpolymath/RSR-template-repo},
+  title = {ISA Satellite Template},
+  year = {2026},
+  url = {https://github.com/hyperpolymath/vex-tools/tree/main/satellite-template},
   license = {PMPL-1.0-or-later}
 }
 ----
 
 == Harvard Style
 
-Polymath, H. (2025) _RSR-template-repo_ [Computer software]. Available at: https://github.com/hyperpolymath/RSR-template-repo
+Polymath, H. (2026) _ISA Satellite Template_ [Computer software]. Available at: https://github.com/hyperpolymath/vex-tools/tree/main/satellite-template
 
 == OSCOLA
 
-Hyper Polymath, 'RSR-template-repo' (2025) <https://github.com/hyperpolymath/RSR-template-repo>
+Hyper Polymath, 'ISA Satellite Template' (2026) <https://github.com/hyperpolymath/vex-tools/tree/main/satellite-template>
 
 == MLA
 
-Polymath, Hyper. "RSR-template-repo." 2025, github.com/hyperpolymath/RSR-template-repo.
+Polymath, Hyper. "ISA Satellite Template." 2026, github.com/hyperpolymath/vex-tools/tree/main/satellite-template.
 
 == APA 7
 
-Polymath, H. (2025). _RSR-template-repo_ [Computer software]. GitHub. https://github.com/hyperpolymath/RSR-template-repo
+Polymath, H. (2026). _ISA Satellite Template_ [Computer software]. GitHub. https://github.com/hyperpolymath/vex-tools/tree/main/satellite-template
 
-== See Also
+== Notes
 
-* link:../CITATION.cff[CITATION.cff]
-* link:../codemeta.json[codemeta.json]
+This repository currently publishes citation metadata in this guide.
