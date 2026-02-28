@@ -1,6 +1,6 @@
 # trust-manifest v1
 # component=satellite-template
-# generated_at=2026-02-28T11:49:08Z
+# generated_at=2026-02-28T12:04:27Z
 ac3496cf7ea8d0361967b03bb48e2b75298cd3087f5bd2e8c636d363dd79b4ae  README.adoc
 165f3686ef9f24fe24b5093c2def812c5bec3e0edd30cf758509145f413de93b  ROADMAP.adoc
 7040d5de9d9fbaa7d3319c10dc546e32c69b2dee66c702ad01c196df55b6ac06  SECURITY.md

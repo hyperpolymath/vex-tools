@@ -1,0 +1,3 @@
+Use a dictionary comprehension:
+
+{key: value for key, value in data.items() if key.startswith("test_")}

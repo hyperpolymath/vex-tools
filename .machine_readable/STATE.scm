@@ -6,6 +6,7 @@
     (status active))
   (project-context
     (name "vex-tools")
+    (canonical-product-title "The Vexometer: Irritation Surface Analyser for LLMs and related tools")
     (canonical-product-name "ISA")
     (legacy-product-name "Vexometer")
     (overall-completion-percentage 70))

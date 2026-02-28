@@ -4,7 +4,8 @@
 
 ## Canonical Product Name
 
-- **ISA** (Irritation Surface Analyser) is the canonical product name.
+- **Canonical title:** **The Vexometer: Irritation Surface Analyser for LLMs and related tools**
+- **Canonical short name:** **ISA** (Irritation Surface Analyser)
 
 ## Legacy Compatibility Name
 
@@ -17,7 +18,6 @@
 
 ## Documentation Rule
 
-- In user-facing prose, prefer **ISA**.
-- On first mention in a document, write **ISA (formerly Vexometer)**.
+- On first mention in user-facing prose, write **The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools**.
+- After first mention, you may use **ISA**.
 - Use **vexometer** only when referring to compatibility identifiers.
-

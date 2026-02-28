@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024-2025 Jonathan D.A. Jewell
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-= ISA (formerly Vexometer): Irritation Surface Analyser
+= The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools
 
 image:https://img.shields.io/badge/License-PMPL--1.0--or--later-6366f1?style=flat&labelColor=4338ca[PMPL-1.0-or-later,link="https://github.com/hyperpolymath/palimpsest-license"]
 
@@ -12,12 +12,13 @@ v0.1.0
 :icons: font
 :source-highlighter: rouge
 
-A rigorous, reproducible tool for quantifying the irritation surface of AI assistants, producing standardised metrics that complement existing benchmarks (MMLU, HumanEval, MT-Bench) with human experience dimensions.
+A rigorous, reproducible tool for quantifying the irritation surface of LLMs and related tools, producing standardised metrics that complement existing benchmarks (MMLU, HumanEval, MT-Bench) with human experience dimensions.
 
 == Naming
 
-*ISA* is the canonical product name.
-*Vexometer* is the legacy codename retained for compatibility in technical identifiers such as `vexometer/`, `vexometer.gpr`, the `vexometer` CLI command, and `Vexometer.*` Ada packages.
+*The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools* is the canonical title.
+*ISA* is the canonical short name.
+*Vexometer* is retained as a compatibility codename in technical identifiers such as `vexometer/`, `vexometer.gpr`, the `vexometer` CLI command, and `Vexometer.*` Ada packages.
 The repository-wide naming policy is defined in link:../NAMING.md[NAMING.md].
 
 == Philosophy
@@ -215,9 +216,43 @@ just run
 # Run tests
 just test
 
+# Run benchmarks (JSON + HTML radar reports + markdown by default)
+just bench
+
 # Validate RSR compliance
 just validate
 ----
+
+== Benchmarking and Dogfooding
+
+ISA now includes a reproducible benchmark harness intended for local dogfooding runs.
+
+[source,bash]
+----
+# Full benchmark pass
+just bench
+
+# Faster iteration pass
+just bench-quick
+----
+
+Artifacts are written to:
+
+* `benchmarks/results/latest.json` - machine-readable benchmark summary
+* `benchmarks/results/<timestamp>.json` - immutable run snapshot
+* `benchmarks/results/cases/*.html` - per-case analysis reports with radar chart + ISA gauge
+* `benchmarks/results/cases/*.{json,md,...}` - additional display formats
+
+Display format selection is controlled by:
+
+* `VEXOMETER_BENCH_DISPLAY_FORMATS` (default: `html,json,md`)
+* accepted values: `html,json,md,csv,latex,yaml`
+
+Database backend for benchmark persistence defaults to *VeriSimDB*:
+
+* `VEXOMETER_BENCH_DB_BACKEND=verisimdb`
+* publish endpoint: `VERISIM_API_URL` (default: `http://localhost:8080/api/v1`)
+* set `VEXOMETER_BENCH_REQUIRE_DB=1` to fail the run if publish fails
 
 == API Providers
 

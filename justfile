@@ -25,6 +25,10 @@ build-all: build-vexometer build-vext build-lazy-eliminator
 test-vexometer:
     cd vexometer && just test
 
+# Run vexometer benchmarks
+bench-vexometer:
+    cd vexometer && just bench
+
 # Run vext tests
 test-vext:
     cd vext && (cargo test --offline || cargo test)
@@ -40,6 +44,9 @@ test-vext-email-gateway:
 
 # Run all tests
 test-all: test-vexometer test-vext test-lazy-eliminator
+
+# Run benchmark suites
+bench-all: bench-vexometer
 
 # Clean all build artifacts
 clean:

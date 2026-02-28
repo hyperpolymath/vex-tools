@@ -7,6 +7,7 @@
     (name "vex-tools")
     (type monorepo)
     (license "PMPL-1.0-or-later")
+    (canonical-product-title "The Vexometer: Irritation Surface Analyser for LLMs and related tools")
     (canonical-product-name "ISA")
     (legacy-product-name "Vexometer")
     (compatibility-identifier "vexometer")

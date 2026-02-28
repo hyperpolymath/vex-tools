@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Jonathan D.A. Jewell
 # SPDX-License-Identifier: PMPL-1.0-or-later
 #
-# ISA (formerly Vexometer) - Irritation Surface Analyser
+# The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools
 # Just task runner configuration
 #
 # Usage: just <task>
@@ -23,13 +23,13 @@ build_mode := env_var_or_default("VEXOMETER_BUILD_MODE", "debug")
 
 # Build the project
 build:
-    @echo "Building Vexometer ({{build_mode}} mode)..."
+    @echo "Building The Vexometer ({{build_mode}} mode)..."
     gprbuild -P vexometer.gpr -XVEXOMETER_BUILD_MODE={{build_mode}}
     @echo "Build complete: bin/vexometer"
 
 # Build in release mode
 release:
-    @echo "Building Vexometer (release mode)..."
+    @echo "Building The Vexometer (release mode)..."
     gprbuild -P vexometer.gpr -XVEXOMETER_BUILD_MODE=release
     @echo "Release build complete: bin/vexometer"
 
@@ -67,6 +67,16 @@ test:
     @echo "Running Ada package tests (Core, CII, Patterns, Probes)..."
     gprbuild -p -P tests/vexometer_tests.gpr
     ./bin/test_runner
+
+# Run core performance benchmarks and generate display artifacts
+bench:
+    @echo "Running ISA core benchmarks..."
+    ./scripts/run-benchmarks.sh
+
+# Run a faster benchmark pass for local iteration
+bench-quick:
+    @echo "Running quick ISA benchmark pass..."
+    VEXOMETER_BENCH_ITERATIONS=50 VEXOMETER_BENCH_LOADER_ITERATIONS=25 ./scripts/run-benchmarks.sh
 
 # Run tests with coverage
 test-coverage: build
@@ -163,7 +173,7 @@ update:
 
 # Show project info
 info:
-    @echo "Vexometer - Irritation Surface Analyser"
+    @echo "The Vexometer - Irritation Surface Analyser (ISA)"
     @echo "Version: {{version}}"
     @echo "Build mode: {{build_mode}}"
     @echo ""

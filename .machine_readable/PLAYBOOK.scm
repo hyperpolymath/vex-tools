@@ -5,5 +5,5 @@
     (last-updated "2026-02-28"))
   (workflow
     (principle "Keep docs and machine-readable state synchronized with tested behavior")
-    (naming-policy "Use ISA in prose, retain vexometer identifiers for compatibility")
+    (naming-policy "Use the full title on first mention, then ISA; retain vexometer identifiers for compatibility")
     (release-gate "Pass monorepo test-all before status upgrades")))

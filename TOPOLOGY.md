@@ -4,7 +4,7 @@
 
 # VEX Toolkit (vex-tools) — Project Topology
 
-> Naming convention: **ISA** is the canonical product name. **vexometer** remains the compatibility identifier in repo/package/CLI/protocol names.
+> Naming convention: **The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools** is the canonical title, and **vexometer** remains the compatibility identifier in repo/package/CLI/protocol names.
 
 ## System Architecture
 

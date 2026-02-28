@@ -126,7 +126,7 @@ package body Vexometer.Reports is
       return To_String (Result);
    end Escape_CSV;
 
-   function Float_Image (V : Float; Decimals : Positive := 2) return String is
+   function Float_Image (V : Float; Decimals : Natural := 2) return String is
       --  Format a Float value with the specified number of decimal places.
       --  Uses the decimal places configured in Current_Options by default.
       Buf : String (1 .. 32);
