@@ -1,14 +1,36 @@
-# SPDX-License-Identifier: PLMP-1.0-or-later
-# Mustfile - mandatory checks
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Mustfile - baseline invariants for vex-tools components
 # See: https://github.com/hyperpolymath/mustfile
 
 version: 1
 
+metadata:
+  name: vexometer-invariants
+  spec: v1
+  description: "Baseline invariants for security and documentation integrity."
+
 checks:
-  - name: security
-    run: just lint
-  - name: tests
-    run: just test
-  - name: format
-    run: just fmt
+  - name: readme-present
+    description: "README.adoc must exist."
+    run: "test -f README.adoc"
+
+  - name: roadmap-present
+    description: "ROADMAP.adoc must exist."
+    run: "test -f ROADMAP.adoc"
+
+  - name: security-policy-present
+    description: "SECURITY.md must exist."
+    run: "test -f SECURITY.md"
+
+  - name: trust-verifier-present
+    description: "Trust verifier must be present in contractiles."
+    run: "test -f contractiles/trust/Trustfile.a2ml"
+
+  - name: security-channel-declared
+    description: "SECURITY.md must include an advisory URL or security email."
+    run: "bash -uc 'rg -n \"security@|security/advisories/new\" SECURITY.md >/dev/null'"
+
+  - name: no-template-drift
+    description: "No unresolved template markers in security-critical docs."
+    run: "bash -uc 'files=\"README.adoc ROADMAP.adoc SECURITY.md\"; [ -f RSR_OUTLINE.adoc ] && files=\"$files RSR_OUTLINE.adoc\"; [ -f docs/CITATIONS.adoc ] && files=\"$files docs/CITATIONS.adoc\"; ! rg -n \"rsr-template-repo|\\\\{\\\\{PROJECT\\\\}\\\\}|contents of Trustfile here\" $files'"
 

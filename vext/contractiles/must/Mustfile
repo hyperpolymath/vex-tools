@@ -1,35 +1,36 @@
-# SPDX-License-Identifier: PLMP-1.0-or-later
-# Mustfile - declarative state contract (template)
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Mustfile - baseline invariants for vex-tools components
 # See: https://github.com/hyperpolymath/mustfile
 
 version: 1
 
 metadata:
-  name: project-state-contract
-  spec: v0.0.1
-  description: "Invariant checks for config, policy, gateway, logs, and schema."
-
-parameters:
-  gateway_port: "8080"
-  schema_version: "v0.0.1"
+  name: vext-invariants
+  spec: v1
+  description: "Baseline invariants for security and documentation integrity."
 
 checks:
-  - name: config-valid
-    description: "config/service.yaml must be valid."
-    run: "yq -e '.' config/service.yaml >/dev/null"
+  - name: readme-present
+    description: "README.adoc must exist."
+    run: "test -f README.adoc"
 
-  - name: policy-compiles
-    description: "policy/policy.ncl must compile."
-    run: "nickel check policy/policy.ncl"
+  - name: roadmap-present
+    description: "ROADMAP.adoc must exist."
+    run: "test -f ROADMAP.adoc"
 
-  - name: gateway-exposes-port
-    description: "Service must expose the configured port."
-    run: "bash -uc 'ss -lnt | rg \":${GATEWAY_PORT:-8080}\"'"
+  - name: security-policy-present
+    description: "SECURITY.md must exist."
+    run: "test -f SECURITY.md"
 
-  - name: logs-are-json
-    description: "Logs must be JSON."
-    run: "bash -uc 'rg --files -g \"*.json\" logs | xargs -r jq -e .'"
+  - name: trust-verifier-present
+    description: "Trust verifier must be present in contractiles."
+    run: "test -f contractiles/trust/Trustfile.a2ml"
 
-  - name: schema-version-matches
-    description: "Schema must match version spec."
-    run: "bash -uc 'rg -n \"${SCHEMA_VERSION:-v0.0.1}\" schema'"
+  - name: security-channel-declared
+    description: "SECURITY.md must include an advisory URL or security email."
+    run: "bash -uc 'rg -n \"security@|security/advisories/new\" SECURITY.md >/dev/null'"
+
+  - name: no-template-drift
+    description: "No unresolved template markers in security-critical docs."
+    run: "bash -uc 'files=\"README.adoc ROADMAP.adoc SECURITY.md\"; [ -f RSR_OUTLINE.adoc ] && files=\"$files RSR_OUTLINE.adoc\"; [ -f docs/CITATIONS.adoc ] && files=\"$files docs/CITATIONS.adoc\"; ! rg -n \"rsr-template-repo|\\\\{\\\\{PROJECT\\\\}\\\\}|contents of Trustfile here\" $files'"
+

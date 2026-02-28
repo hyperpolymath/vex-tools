@@ -23,3 +23,8 @@ We respond within 48 hours.
 - CodeQL for code scanning
 - Secret scanning and push protection
 
+
+## Security Contact
+
+- Advisories: https://github.com/hyperpolymath/vex-tools/security/advisories/new
+- Email: security@jewell.dev
