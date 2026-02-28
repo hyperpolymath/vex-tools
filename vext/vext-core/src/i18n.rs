@@ -11,7 +11,7 @@ use fluent::{FluentBundle, FluentResource};
 use fluent_bundle::FluentArgs;
 
 #[cfg(feature = "i18n")]
-use unic_langid::{LanguageIdentifier, langid};
+use unic_langid::LanguageIdentifier;
 
 #[cfg(feature = "i18n")]
 use anyhow::Result;
@@ -38,7 +38,7 @@ impl I18n {
     }
 
     /// Load translations from a Fluent FTL file
-    pub fn load_ftl(&mut, lang: &str, ftl_content: &str) -> Result<()> {
+    pub fn load_ftl(&mut self, lang: &str, ftl_content: &str) -> Result<()> {
         let lang_id: LanguageIdentifier = lang.parse()?;
         let resource = FluentResource::try_new(ftl_content.to_string())
             .map_err(|e| anyhow::anyhow!("Failed to parse FTL: {:?}", e))?;
@@ -53,26 +53,22 @@ impl I18n {
 
     /// Get a localized message
     pub fn get(&self, lang: &str, message_id: &str) -> Option<String> {
-        self.bundles.get(lang)
-            .or_else(|| self.bundles.get(&self.default_lang.to_string()))
-            .and_then(|bundle| bundle.get_message(message_id))
-            .and_then(|msg| msg.value())
-            .map(|pattern| {
-                let mut errors = vec![];
-                bundle.format_pattern(pattern, None, &mut errors).to_string()
-            })
+        let bundle = self.bundles.get(lang)
+            .or_else(|| self.bundles.get(&self.default_lang.to_string()))?;
+        let msg = bundle.get_message(message_id)?;
+        let pattern = msg.value()?;
+        let mut errors = vec![];
+        Some(bundle.format_pattern(pattern, None, &mut errors).to_string())
     }
 
     /// Get a localized message with arguments
     pub fn get_with_args(&self, lang: &str, message_id: &str, args: &FluentArgs) -> Option<String> {
-        self.bundles.get(lang)
-            .or_else(|| self.bundles.get(&self.default_lang.to_string()))
-            .and_then(|bundle| bundle.get_message(message_id))
-            .and_then(|msg| msg.value())
-            .map(|pattern| {
-                let mut errors = vec![];
-                bundle.format_pattern(pattern, Some(args), &mut errors).to_string()
-            })
+        let bundle = self.bundles.get(lang)
+            .or_else(|| self.bundles.get(&self.default_lang.to_string()))?;
+        let msg = bundle.get_message(message_id)?;
+        let pattern = msg.value()?;
+        let mut errors = vec![];
+        Some(bundle.format_pattern(pattern, Some(args), &mut errors).to_string())
     }
 }
 
@@ -85,7 +81,7 @@ impl I18n {
         Err(anyhow::anyhow!("i18n not enabled. Rebuild with --features i18n"))
     }
 
-    pub fn load_ftl(&mut, _lang: &str, _ftl: &str) -> anyhow::Result<()> {
+    pub fn load_ftl(&mut self, _lang: &str, _ftl: &str) -> anyhow::Result<()> {
         Ok(())
     }
 

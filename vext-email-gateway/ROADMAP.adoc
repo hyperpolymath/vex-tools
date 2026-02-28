@@ -1,22 +1,29 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-= YOUR Template Repo Roadmap
+= vext-email-gateway Roadmap
+:toc: left
+:toclevels: 2
 
 == Current Status
 
-Initial development phase.
+Prototype stage. Core architecture and message flow are drafted, but production wiring is not complete.
 
-== Milestones
+== Immediate Priorities (v0.1.x hardening)
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+* [ ] Align cryptography/data model dependencies with current crate APIs
+* [ ] Replace prototype identity handling with persistent email-to-identity storage
+* [ ] Finalize async network abstraction for dyn-safe gateway integration
+* [ ] Add compile + test CI gate and ensure green baseline
 
-=== v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+== Integration Priorities (v0.2.x)
 
-== Future Directions
+* [ ] Implement SMTP/IMAP ingestion loop
+* [ ] Complete subscription persistence and migration model
+* [ ] Add robust error taxonomy and retry/backoff policies
+* [ ] Add end-to-end tests for email -> vext -> subscriber delivery
 
-_To be determined based on community feedback._
+== Production Readiness Criteria (v1.0)
+
+* [ ] Security review completed and documented
+* [ ] Rate limiting, abuse controls, and audit logging enabled
+* [ ] Operational runbook and deployment guide published
+* [ ] Compatibility verified against supported vext protocol versions

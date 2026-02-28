@@ -1,22 +1,29 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-= YOUR Template Repo Roadmap
+= vex-lazy-eliminator Roadmap
+:toc: left
+:toclevels: 2
 
 == Current Status
 
-Initial development phase.
+Core analyzer and CLI are implemented and tests pass.
 
-== Milestones
+== Near-Term Milestones (v0.2.x)
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+* [ ] Reduce warning noise and tighten lint baseline
+* [ ] Improve language-specific false-positive handling
+* [ ] Add regression fixtures for incomplete-code edge cases
+* [ ] Add CI recipe for trace schema validation (`vexometer-trace-v1`)
 
-=== v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+== Medium-Term Milestones (v0.3.x)
 
-== Future Directions
+* [ ] Configurable per-language severity weights
+* [ ] Batch mode for repository-level reports
+* [ ] SARIF export for CI/code-scanning integrations
+* [ ] Before/after efficacy dataset publication
 
-_To be determined based on community feedback._
+== v1.0 Readiness Criteria
+
+* [ ] Stable detection schema and versioned output contract
+* [ ] Documented compatibility matrix across supported languages
+* [ ] Comprehensive test coverage for parser/detector boundaries
+* [ ] Published operational guidance for CI integration

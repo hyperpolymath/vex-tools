@@ -17,5 +17,5 @@ pub mod pandoc;
 pub mod spellcheck;
 pub mod i18n;
 
-pub use error::Error;
+pub use error::VextError as Error;
 pub type Result<T> = std::result::Result<T, Error>;

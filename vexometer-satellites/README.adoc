@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 // SPDX-License-Identifier: PMPL-1.0-or-later
 
-= Vexometer Satellites
+= ISA Satellites (formerly Vexometer Satellites)
 :toc: left
 :toclevels: 3
 :icons: font
@@ -9,16 +9,18 @@
 
 image:https://img.shields.io/badge/License-PMPL--1.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
 
-Umbrella documentation hub for the link:https://github.com/hyperpolymath/vexometer[vexometer] satellite intervention system.
+Umbrella documentation hub for the ISA satellite intervention system (core repository: link:https://github.com/hyperpolymath/vexometer[vexometer]).
 
 == Overview
 
-*Vexometer* is a diagnostic instrument that measures AI assistant irritation surfaces across 10 dimensions. *Satellites* are independent intervention tools that reduce specific irritation metrics.
+*ISA* is a diagnostic instrument that measures AI assistant irritation surfaces across 10 dimensions. *Satellites* are independent intervention tools that reduce specific irritation metrics.
 
 [quote]
 ____
-Vexometer *measures* irritation. Satellites *fix* it.
+ISA *measures* irritation. Satellites *fix* it.
 ____
+
+Naming compatibility note: *ISA* is the canonical product name; `vexometer` remains in compatibility identifiers such as repository paths and protocol IDs (`vexometer-trace-v1`, `vexometer-efficacy-v1`).
 
 This repository serves as:
 
@@ -203,7 +205,7 @@ Each satellite targets one or more of these irritation dimensions:
 
 === vexometer-trace-v1
 
-Satellites can include before/after traces that vexometer validates.
+Satellites can include before/after traces that ISA validates (via vexometer compatibility tooling).
 
 [source,json]
 ----
@@ -360,7 +362,7 @@ Priority areas:
 
 == Resources
 
-* link:https://github.com/hyperpolymath/vexometer[Vexometer (main diagnostic instrument)]
+* link:https://github.com/hyperpolymath/vexometer[ISA (main diagnostic instrument; repo identifier: vexometer)]
 * link:https://github.com/hyperpolymath/vex-satellite-template[Satellite Template Repository]
 * link:docs/architecture.adoc[Architecture Details]
 * link:docs/integration.adoc[Integration Guide]
@@ -374,4 +376,4 @@ Individual satellites may use different licenses (check each satellite's LICENSE
 
 ---
 
-*Vexometer measures irritation. Satellites fix it.*
+*ISA measures irritation. Satellites fix it.*

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2024-2025 Jonathan D.A. Jewell
 // SPDX-License-Identifier: MPL-2.0-or-later
 
-= Vexometer Roadmap
+= ISA Roadmap (formerly Vexometer Roadmap)
 Jonathan D.A. Jewell <jonathan@jewell.dev>
 v0.1.0
 :toc: left
@@ -9,7 +9,7 @@ v0.1.0
 :icons: font
 :source-highlighter: rouge
 
-Development roadmap for Vexometer, the Irritation Surface Analyser.
+Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 
 == Current State (v0.1.0)
 

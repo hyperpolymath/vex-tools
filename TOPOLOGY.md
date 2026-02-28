@@ -1,8 +1,10 @@
 <!-- SPDX-License-Identifier: PMPL-1.0-or-later -->
 <!-- TOPOLOGY.md — Project architecture map and completion dashboard -->
-<!-- Last updated: 2026-02-19 -->
+<!-- Last updated: 2026-02-28 -->
 
 # VEX Toolkit (vex-tools) — Project Topology
+
+> Naming convention: **ISA** is the canonical product name. **vexometer** remains the compatibility identifier in repo/package/CLI/protocol names.
 
 ## System Architecture
 
@@ -17,7 +19,7 @@
                         │           VEX TOOLKIT HUB               │
                         │                                         │
                         │  ┌───────────┐  ┌───────────────────┐  │
-                        │  │ Vexometer │  │  Lazy             │  │
+                        │  │ ISA       │  │  Lazy             │  │
                         │  │ (Metrics) │  │  Eliminator       │  │
                         │  └─────┬─────┘  └────────┬──────────┘  │
                         │        │                 │              │
@@ -38,8 +40,8 @@
 
                         ┌─────────────────────────────────────────┐
                         │          REPO INFRASTRUCTURE            │
-                        │  Justfile Automation  .machine_readable/  │
-                        │  Monorepo Consol     0-AI-MANIFEST.a2ml  │
+                        │  Justfile Automation  .machine_readable/ │
+                        │  Docs + Roadmaps      Monorepo Hygiene   │
                         └─────────────────────────────────────────┘
 ```
 
@@ -48,30 +50,30 @@
 ```
 COMPONENT                          STATUS              NOTES
 ─────────────────────────────────  ──────────────────  ─────────────────────────────────
-VEXOMETER & INTERVENTION
-  Vexometer (Analyser)              ██████████ 100%    10 metric dimensions stable
-  Vexometer Satellites              ████████░░  80%    Intervention hub active
-  Lazy Eliminator                   ██████████ 100%    Completeness logic verified
-  Satellite Template                ██████████ 100%    Scaffolding stable
+ISA & INTERVENTION
+  ISA (vexometer analyser)          ███████░░░  70%    Core metrics implemented; CLI/test wiring incomplete
+  ISA Satellites                    █████░░░░░  45%    Protocol/docs exist; most satellites still planned
+  Lazy Eliminator                   ████████░░  75%    Core analyzer tested; polish/integration pending
+  Satellite Template                █████████░  90%    Template structure stable by design
 
 VEXT PROTOCOL
-  Vext (Core Protocol)              ██████████ 100%    Cryptographic neutrality active
-  Vext Email Gateway                ████████░░  80%    Email bridge stable
-  Neutrality Proofs                 ██████░░░░  60%    Algorithmic verification active
+  Vext (Core Protocol)              ████████░░  85%    Core Rust tests passing
+  Vext Email Gateway                ███░░░░░░░  30%    Prototype; not production-wired yet
+  Neutrality Proofs                 ██░░░░░░░░  25%    Proof direction defined; implementation in progress
 
 REPO INFRASTRUCTURE
-  Justfile Automation               ██████████ 100%    Standard build/test tasks
-  .machine_readable/                ██████████ 100%    STATE tracking active
+  Justfile Automation               ████████░░  80%    Main flows working; component parity still in progress
+  .machine_readable/                █████████░  90%    Metadata aligned to current monorepo
   Consolidation (2026)              ██████████ 100%    6 repos successfully merged
 
 ─────────────────────────────────────────────────────────────────────────────
-OVERALL:                            █████████░  ~90%   Unified toolkit operational
+OVERALL:                            ██████░░░░  ~65%   Core operational; ecosystem integration still maturing
 ```
 
 ## Key Dependencies
 
 ```
-Lazy Patterns ───► Eliminator Engine ──► Vexometer Score ──► Intervention
+Lazy Patterns ───► Eliminator Engine ──► ISA Score ───► Intervention
      │                   │                   │                    │
      ▼                   ▼                   ▼                    ▼
 Comm Event ──────► Vext Protocol ──────► Email Gateway ──────► Recipient

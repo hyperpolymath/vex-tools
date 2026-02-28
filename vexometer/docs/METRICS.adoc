@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
 // SPDX-License-Identifier: MPL-2.0-or-later
 
-= Vexometer Metrics Reference
+= ISA Metrics Reference (formerly Vexometer Metrics Reference)
 :toc: left
 :toclevels: 3
 :icons: font
@@ -9,8 +9,10 @@
 
 == Overview
 
-Vexometer measures ten dimensions of AI assistant irritation surfaces.
+ISA measures ten dimensions of AI assistant irritation surfaces.
 All metrics are normalised to a 0-1 scale where *lower is better*.
+
+Technical compatibility note: metric package and protocol identifiers continue to use the `vexometer` prefix.
 
 [cols="1,3,3,2", options="header"]
 |===

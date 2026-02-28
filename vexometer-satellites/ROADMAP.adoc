@@ -1,22 +1,35 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-= YOUR Template Repo Roadmap
+= ISA Satellites Roadmap
+:toc: left
+:toclevels: 2
 
 == Current Status
 
-Initial development phase.
+Ecosystem design and protocol contracts are documented. Most individual satellites remain planned rather than implemented.
 
-== Milestones
+== Near-Term Milestones
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+* [ ] Publish authoritative satellite registry status table (implemented/in-progress/planned)
+* [ ] Freeze `vexometer-trace-v1` and `vexometer-efficacy-v1` schemas
+* [ ] Add reference validation fixtures for trace and efficacy reports
+* [ ] Document integration contract between ISA core and satellite outputs
 
-=== v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+== Implementation Sequence
 
-== Future Directions
+=== Phase 1: First Production Satellite
 
-_To be determined based on community feedback._
+* [ ] Drive `vex-lazy-eliminator` to production-ready integration quality
+* [ ] Publish reproducible before/after efficacy pack
+* [ ] Validate end-to-end compatibility with ISA metrics pipeline
+
+=== Phase 2: High-Impact Satellites
+
+* [ ] `vex-hallucination-guard`
+* [ ] `vex-sycophancy-shield`
+* [ ] `vex-scope-governor`
+
+=== Phase 3: Ecosystem Maturity
+
+* [ ] Cross-satellite compatibility matrix
+* [ ] Versioned contract for satellite metadata
+* [ ] Shared CI templates for satellite repositories

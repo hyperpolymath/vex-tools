@@ -1,23 +1,5 @@
 # Security Policy
 
-<!-- 
-============================================================================
-TEMPLATE INSTRUCTIONS (delete this block before publishing)
-============================================================================
-Replace all {{PLACEHOLDER}} values with your information:
-  language-bridges     - Your project name
-  hyperpolymath            - GitHub username or org (e.g., hyperpolymath)
-  language-bridges             - Repository name
-  jonathan.jewell@open.ac.uk   - Security contact email
-  TBD  - Your PGP key fingerprint (40 chars, no spaces)
-  https://hyperpolymath.github.io/pgp.asc      - URL to your public PGP key
-  https://hyperpolymath.github.io          - Your website/domain
-  2026     - Current year for copyright
-
-Optional: Remove sections that don't apply (e.g., PGP if you don't use it)
-============================================================================
--->
-
 We take security seriously. We appreciate your efforts to responsibly disclose vulnerabilities and will make every effort to acknowledge your contributions.
 
 ## Table of Contents
@@ -40,7 +22,7 @@ We take security seriously. We appreciate your efforts to responsibly disclose v
 
 The preferred method for reporting security vulnerabilities is through GitHub's Security Advisory feature:
 
-1. Navigate to [Report a Vulnerability](https://github.com/hyperpolymath/language-bridges/security/advisories/new)
+1. Navigate to [Report a Vulnerability](https://github.com/hyperpolymath/vex-tools/security/advisories/new)
 2. Click **"Report a vulnerability"**
 3. Complete the form with as much detail as possible
 4. Submit — we'll receive a private notification
@@ -203,7 +185,7 @@ If we cannot reach agreement on disclosure timing, we default to 90 days from yo
 
 The following are within scope for security research:
 
-- This repository (`hyperpolymath/language-bridges`) and all its code
+- This repository (`hyperpolymath/vex-tools`) and all its code
 - Official releases and packages published from this repository
 - Documentation that could lead to security issues
 - Build and deployment configurations in this repository
@@ -322,7 +304,7 @@ Recognition includes:
 To stay informed about security updates:
 
 - **Watch this repository**: Click "Watch" → "Custom" → Select "Security alerts"
-- **GitHub Security Advisories**: Published at [Security Advisories](https://github.com/hyperpolymath/language-bridges/security/advisories)
+- **GitHub Security Advisories**: Published at [Security Advisories](https://github.com/hyperpolymath/vex-tools/security/advisories)
 - **Release notes**: Security fixes noted in [CHANGELOG](CHANGELOG.md)
 
 ### Update Policy
@@ -348,7 +330,7 @@ To stay informed about security updates:
 
 ## Security Best Practices
 
-When using language-bridges, we recommend:
+When using vex-tools, we recommend:
 
 ### General
 
@@ -371,7 +353,7 @@ When using language-bridges, we recommend:
 ## Additional Resources
 
 - [Our PGP Public Key](https://hyperpolymath.github.io/pgp.asc)
-- [Security Advisories](https://github.com/hyperpolymath/language-bridges/security/advisories)
+- [Security Advisories](https://github.com/hyperpolymath/vex-tools/security/advisories)
 - [Changelog](CHANGELOG.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [CVE Database](https://cve.mitre.org/)
@@ -383,8 +365,8 @@ When using language-bridges, we recommend:
 
 | Purpose | Contact |
 |---------|---------|
-| **Security issues** | [Report via GitHub](https://github.com/hyperpolymath/language-bridges/security/advisories/new) or jonathan.jewell@open.ac.uk |
-| **General questions** | [GitHub Discussions](https://github.com/hyperpolymath/language-bridges/discussions) |
+| **Security issues** | [Report via GitHub](https://github.com/hyperpolymath/vex-tools/security/advisories/new) or jonathan.jewell@open.ac.uk |
+| **General questions** | [GitHub Discussions](https://github.com/hyperpolymath/vex-tools/discussions) |
 | **Other enquiries** | See [README](README.md) for contact information |
 
 ---
@@ -399,7 +381,7 @@ This security policy may be updated from time to time. Significant changes will 
 
 ---
 
-*Thank you for helping keep language-bridges and its users safe.* 🛡️
+*Thank you for helping keep vex-tools and its users safe.* 🛡️
 
 ---
 

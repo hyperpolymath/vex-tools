@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 Jonathan D.A. Jewell
 # SPDX-License-Identifier: PMPL-1.0-or-later
 #
-# Vexometer - Irritation Surface Analyser
+# ISA (formerly Vexometer) - Irritation Surface Analyser
 # Just task runner configuration
 #
 # Usage: just <task>
@@ -63,10 +63,10 @@ analyse: build
 # =============================================================================
 
 # Run all tests
-test: build
-    @echo "Running tests..."
-    # AUnit test runner would go here
-    @echo "Tests not yet implemented"
+test:
+    @echo "Automated Ada tests are not wired up yet."
+    @echo "Current status: no AUnit runner configured in this repository."
+    @echo "Use 'just build' to validate compilation once GtkAda/GNATCOLL/AWS are installed."
 
 # Run tests with coverage
 test-coverage: build
@@ -95,17 +95,19 @@ docs-html:
 validate:
     @echo "Validating RSR compliance..."
     @echo "Checking required files..."
-    @test -f flake.nix && echo "✓ flake.nix" || echo "✗ flake.nix missing"
     @test -f justfile && echo "✓ justfile" || echo "✗ justfile missing"
     @test -f README.adoc && echo "✓ README.adoc" || echo "✗ README.adoc missing"
-    @test -f LICENSE.txt && echo "✓ LICENSE.txt" || echo "✗ LICENSE.txt missing"
+    @if [ -f LICENSE ] || [ -f LICENSE.txt ]; then echo "✓ LICENSE or LICENSE.txt"; else echo "✗ LICENSE/LICENSE.txt missing"; fi
     @test -f SECURITY.md && echo "✓ SECURITY.md" || echo "✗ SECURITY.md missing"
     @test -f CODE_OF_CONDUCT.md && echo "✓ CODE_OF_CONDUCT.md" || echo "✗ CODE_OF_CONDUCT.md missing"
     @test -f CONTRIBUTING.adoc && echo "✓ CONTRIBUTING.adoc" || echo "✗ CONTRIBUTING.adoc missing"
     @test -f GOVERNANCE.md && echo "✓ GOVERNANCE.md" || echo "✗ GOVERNANCE.md missing"
     @test -f FUNDING.yml && echo "✓ FUNDING.yml" || echo "✗ FUNDING.yml missing"
     @test -f CLAUDE.md && echo "✓ CLAUDE.md" || echo "✗ CLAUDE.md missing"
-    @test -d .well-known && echo "✓ .well-known/" || echo "✗ .well-known/ missing"
+    @echo ""
+    @echo "Checking optional/recommended files..."
+    @test -f flake.nix && echo "✓ flake.nix" || echo "i flake.nix not present (optional)"
+    @test -d .well-known && echo "✓ .well-known/" || echo "i .well-known/ not present (optional)"
     @echo ""
     @echo "Checking SPDX headers..."
     @grep -l "SPDX-License-Identifier" src/*.ads src/*.adb 2>/dev/null | wc -l | xargs -I {} echo "✓ {} files with SPDX headers"

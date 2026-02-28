@@ -27,11 +27,16 @@ test-vexometer:
 
 # Run vext tests
 test-vext:
-    cd vext && cargo test
+    cd vext && (cargo test --offline || cargo test)
 
 # Run lazy-eliminator tests
 test-lazy-eliminator:
     cd lazy-eliminator && just test
+
+# vext-email-gateway status check
+test-vext-email-gateway:
+    @echo "vext-email-gateway is currently prototype-stage and not part of the required test-all gate."
+    @echo "See vext-email-gateway/README.adoc and ROADMAP.adoc for current wiring status."
 
 # Run all tests
 test-all: test-vexometer test-vext test-lazy-eliminator

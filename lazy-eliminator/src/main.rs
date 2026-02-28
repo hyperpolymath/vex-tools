@@ -3,7 +3,7 @@
 
 use clap::{Parser, Subcommand};
 use std::path::PathBuf;
-use vex_lazy_eliminator::{Analyzer, Config, Language, TraceReport, VexometerTrace};
+use vex_lazy_eliminator::{Analyzer, Language, TraceReport, VexometerTrace};
 
 #[derive(Parser)]
 #[command(name = "vex-lazy-eliminator")]

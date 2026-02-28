@@ -1,22 +1,27 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-= YOUR Template Repo Roadmap
+= ISA Satellite Template Roadmap
 
-== Current Status
+== Purpose
 
-Initial development phase.
+This repository is a reusable template for new ISA satellite projects.
+Placeholder markers are intentional and are meant to be replaced by each generated satellite.
 
-== Milestones
+== Template Maintenance Milestones
 
-=== v0.1.0 - Foundation
-* [ ] Core functionality
-* [ ] Basic documentation
-* [ ] CI/CD pipeline
+=== v0.1.x
 
-=== v1.0.0 - Stable Release
-* [ ] Full feature set
-* [ ] Comprehensive tests
-* [ ] Production ready
+* [ ] Keep scaffold aligned with current RSR requirements
+* [ ] Keep ABI/FFI template files aligned with current conventions
+* [ ] Keep contractiles examples and docs current
 
-== Future Directions
+=== v0.2.x
 
-_To be determined based on community feedback._
+* [ ] Add generator validation checklist for new satellite repos
+* [ ] Add CI starter workflow for satellite projects
+* [ ] Add sample trace/efficacy artifacts to speed onboarding
+
+== Definition of Done for Template Releases
+
+* [ ] New satellite repo can be instantiated without broken placeholders in required files
+* [ ] README/ROADMAP language is explicit about replacement steps
+* [ ] Generated repos pass baseline lint/test scaffolding checks

@@ -1,8 +1,10 @@
-# Vexometer - Irritation Surface Analyser
+# ISA (formerly Vexometer) - Irritation Surface Analyser
 
 ## Project Specification v0.1.0
 
-**Codename:** Vexometer
+**Canonical Name:** ISA
+**Legacy Codename:** Vexometer (retained in technical identifiers)
+**CLI/Package Identifier:** `vexometer`
 **Author:** Jonathan D.A. Jewell
 **License:** PMPL-1.0-or-later
 **Language:** Ada 2022
@@ -22,7 +24,7 @@ Current benchmarks measure capability—what models CAN do. They do not measure 
 
 A model that scores highly on benchmarks but peppers every response with "Great question! I'd be happy to help!" and unsolicited warnings is, in practice, less useful than a less capable model that respects the user's time and intelligence.
 
-**Vexometer measures what users actually care about.**
+**ISA measures what users actually care about.**
 
 ---
 
@@ -146,7 +148,7 @@ vexometer/
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│  Vexometer - Irritation Surface Analyser                         [—][□][×]│
+│  ISA (Vexometer) - Irritation Surface Analyser                  [—][□][×]│
 ├─────────────────────────────────────────────────────────────────────────┤
 │ ┌───────────────┐ ┌─────────────────────┐ ┌───────────────────────────┐ │
 │ │ Model: [▼    ]│ │                     │ │ Findings                  │ │

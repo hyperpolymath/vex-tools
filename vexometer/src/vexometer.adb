@@ -1,4 +1,4 @@
---  Vexometer - Irritation Surface Analyser
+--  ISA (formerly Vexometer) - Irritation Surface Analyser
 --  Main entry point
 --
 --  Copyright (C) 2024 Jonathan D.A. Jewell
@@ -21,10 +21,11 @@ procedure Vexometer is
 
    procedure Print_Usage is
    begin
-      Put_Line ("Vexometer " & Vexometer.Version);
+      Put_Line ("ISA (formerly Vexometer) " & Vexometer.Version);
       Put_Line ("Irritation Surface Analyser for AI Assistants");
       New_Line;
       Put_Line ("Usage: vexometer [OPTIONS] [COMMAND]");
+      Put_Line ("Name: ISA is canonical; 'vexometer' is retained for compatibility.");
       New_Line;
       Put_Line ("Commands:");
       Put_Line ("  gui              Launch graphical interface (default)");
@@ -68,7 +69,7 @@ procedure Vexometer is
 
    procedure Print_Version is
    begin
-      Put_Line ("Vexometer " & Vexometer.Version);
+      Put_Line ("ISA (formerly Vexometer) " & Vexometer.Version);
       Put_Line ("Copyright (C) 2024 Jonathan D.A. Jewell");
       Put_Line ("License: PMPL-1.0-or-later");
       Put_Line ("This is free software; you are free to change and redistribute it.");

@@ -4,7 +4,6 @@
 use crate::detection::IncompletenessKind;
 use crate::language::Language;
 use regex::Regex;
-use std::sync::OnceLock;
 
 /// Pattern definition for detecting incompleteness
 pub struct Pattern {

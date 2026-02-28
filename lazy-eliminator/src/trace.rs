@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 // SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
 
-use crate::detection::DetectionSummary;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 

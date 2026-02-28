@@ -12,7 +12,14 @@
 image:https://img.shields.io/badge/License-PMPL--1.0--or--later-6366f1?style=flat&labelColor=4338ca[PMPL-1.0-or-later,link="https://github.com/hyperpolymath/palimpsest-license"]
 image:https://img.shields.io/badge/RSR-compliant-brightgreen[RSR Compliant]
 
-Consolidated monorepo for all VEX-related tools: the Vexometer irritation surface analyser, its satellite intervention system, and the Vext verifiable communications protocol.
+Consolidated monorepo for all VEX-related tools: the ISA (Irritation Surface Analyser, formerly Vexometer), its satellite intervention system, and the Vext verifiable communications protocol.
+
+== Naming Convention
+
+* *Canonical product name*: *ISA* (Irritation Surface Analyser)
+* *Legacy compatibility identifier*: `vexometer`
+* The `vexometer` identifier remains in repository paths, package names, CLI commands, and protocol IDs (for example `vexometer-trace-v1`) to preserve compatibility.
+* See link:NAMING.md[NAMING.md] for the authoritative naming policy used across this repository.
 
 == Repository Structure
 
@@ -21,13 +28,13 @@ Consolidated monorepo for all VEX-related tools: the Vexometer irritation surfac
 | Directory | Description
 
 | `vexometer/`
-| **Vexometer** -- Irritation surface analyser for AI assistants. Quantifies irritation across 10 dimensions with standardised, reproducible metrics.
+| **ISA (formerly Vexometer)** -- Irritation surface analyser for AI assistants. Quantifies irritation across 10 dimensions with standardised, reproducible metrics.
 
 | `vexometer-satellites/`
-| **Vexometer Satellites** -- Umbrella documentation and coordination hub for the satellite intervention system.
+| **ISA Satellites (vexometer-satellites)** -- Umbrella documentation and coordination hub for the satellite intervention system.
 
 | `satellite-template/`
-| **Satellite Template** -- Scaffolding template for creating new vexometer satellite projects.
+| **Satellite Template** -- Scaffolding template for creating new ISA satellite projects.
 
 | `lazy-eliminator/`
 | **Lazy Eliminator** -- Completeness enforcement for LLM-generated code. Detects and eliminates lazy patterns.
@@ -36,7 +43,7 @@ Consolidated monorepo for all VEX-related tools: the Vexometer irritation surfac
 | **Vext** -- Verifiable, Extensible Communications Protocol with cryptographic proof of algorithmic neutrality.
 
 | `vext-email-gateway/`
-| **Vext Email Gateway** -- Email bridge for interoperability between Vext and traditional email.
+| **Vext Email Gateway** -- Email bridge for interoperability between Vext and traditional email (*prototype; end-to-end wiring in progress*).
 |===
 
 == Quick Start

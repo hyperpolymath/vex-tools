@@ -41,10 +41,10 @@ clap = { version = "4.4", features = ["derive", "env"] }
 thiserror = "1.0"
 anyhow = "1.0"
 
-# TLS support (use vendored OpenSSL for cross-compilation)
+# TLS support
 native-tls = "0.2"
 tokio-native-tls = "0.3"
-openssl-sys = { version = "0.9", features = ["vendored"] }
+openssl-sys = "0.9"
 
 # DNS resolution (SRV records)
 trust-dns-resolver = "0.23"
@@ -71,12 +71,7 @@ i18n = ["dep:fluent", "dep:fluent-bundle", "dep:unic-langid"]
 tokio-test = "0.4"
 tempfile = "3.9"
 mockall = "0.12"
-
-[profile.release]
-lto = true
-codegen-units = 1
-panic = "abort"
-strip = true
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [[bin]]
 name = "vextd"
@@ -110,5 +105,3 @@ assets = [
     { source = "target/release/vextd", dest = "/usr/bin/vextd", mode = "755" },
     { source = "target/release/vext-send", dest = "/usr/bin/vext-send", mode = "755" },
 ]
-[dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }

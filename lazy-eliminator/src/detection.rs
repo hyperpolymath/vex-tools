@@ -155,7 +155,7 @@ impl DetectionSummary {
         let mut critical = 0;
         let mut high_priority = 0;
         let mut total_severity = 0.0;
-        let mut max_severity = 0.0;
+        let mut max_severity: f64 = 0.0;
 
         for detection in detections {
             *by_kind.entry(format!("{}", detection.kind)).or_insert(0) += 1;

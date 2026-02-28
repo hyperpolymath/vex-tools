@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
 // SPDX-License-Identifier: MPL-2.0-or-later
 
-= Vexometer Satellite Architecture
+= ISA Satellite Architecture (formerly Vexometer Satellite Architecture)
 :toc: left
 :toclevels: 3
 :icons: font
@@ -9,7 +9,7 @@
 
 == Philosophy
 
-Vexometer is a *diagnostic instrument* - it measures AI assistant irritation
+ISA is a *diagnostic instrument* - it measures AI assistant irritation
 surfaces but does not fix them. Interventions that reduce irritation are
 implemented in separate *satellite repositories*.
 
@@ -18,7 +18,9 @@ This separation provides:
 * *Clean separation of concerns* - measurement vs intervention
 * *Independent development* - satellites can evolve separately
 * *Optional integration* - satellites work standalone
-* *Scope discipline* - vexometer avoids feature creep
+* *Scope discipline* - ISA avoids feature creep
+
+Naming compatibility note: integration protocol IDs remain `vexometer-*` for backwards compatibility.
 
 == Architecture Overview
 
@@ -139,7 +141,7 @@ assumption ranking.
 
 === vexometer-trace-v1
 
-Satellites can include before/after traces that vexometer validates.
+Satellites can include before/after traces that ISA validates (via vexometer compatibility tooling).
 
 *Trace format*:
 
@@ -410,6 +412,6 @@ All satellites must follow:
 
 == See Also
 
-* link:METRICS.adoc[Metrics Reference] - All 10 vexometer metrics
+* link:METRICS.adoc[Metrics Reference] - All 10 ISA metrics (vexometer identifiers)
 * link:../ECOSYSTEM.scm[Ecosystem Map] - Satellite relationships
-* link:../META.scm[Project Metadata] - Vexometer meta-information
+* link:../META.scm[Project Metadata] - ISA meta-information
