@@ -59,5 +59,21 @@ lint:
 must-all:
     ./scripts/run-must-gates.sh
 
+# Generate trust manifests for all components
+trust-generate:
+    ./scripts/trust/generate-manifest.sh
+
+# Verify trust manifests for all components
+trust-verify:
+    ./scripts/trust/verify-manifest.sh
+
+# Sign trust manifests (minisign or gpg required)
+trust-sign:
+    ./scripts/trust/sign-manifest.sh
+
+# Rotate Trustfile metadata timestamps and regenerate manifests
+trust-rotate:
+    ./scripts/trust/rotate-trustfile.sh
+
 # Full CI-equivalent local gate
-ci-gate: must-all test-all
+ci-gate: must-all trust-verify test-all

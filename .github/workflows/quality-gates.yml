@@ -21,6 +21,9 @@ jobs:
       - name: Run must invariants
         run: ./scripts/run-must-gates.sh
 
+      - name: Verify trust manifests
+        run: ./scripts/trust/verify-manifest.sh
+
   test-all:
     runs-on: ubuntu-latest
     steps:

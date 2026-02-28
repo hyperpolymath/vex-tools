@@ -15,6 +15,8 @@ pragma Ada_2022;
 with Ada.Strings.Fixed;
 with Ada.Characters.Handling;
 with Ada.Directories;
+with Ada.Text_IO;
+with Ada.Strings;
 
 package body Vexometer.Patterns is
 
@@ -84,6 +86,276 @@ package body Vexometer.Patterns is
       return Index (Source, Pattern) > 0;
    end Contains;
 
+   function Read_File (Path : String) return String is
+      use Ada.Text_IO;
+
+      F       : File_Type;
+      Content : Unbounded_String := Null_Unbounded_String;
+   begin
+      Open (F, In_File, Path);
+      while not End_Of_File (F) loop
+         Append (Content, Get_Line (F));
+         Append (Content, ASCII.LF);
+      end loop;
+      Close (F);
+      return To_String (Content);
+   exception
+      when others =>
+         return "";
+   end Read_File;
+
+   function Find_Value_Start
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return Natural
+   is
+      use Ada.Strings.Fixed;
+
+      Key_Token : constant String := """" & Key & """";
+      Start_At  : constant Positive := Positive'Max (Source'First, From_Pos);
+      Key_Pos   : constant Natural := Index (Source, Key_Token, Start_At);
+      Pos       : Natural;
+   begin
+      if Source'Length = 0 then
+         return 0;
+      end if;
+
+      if Key_Pos = 0 then
+         return 0;
+      end if;
+
+      Pos := Index (Source, ":", Key_Pos + Key_Token'Length);
+      if Pos = 0 then
+         return 0;
+      end if;
+
+      Pos := Pos + 1;
+      while Pos <= Source'Last loop
+         exit when Source (Pos) /= ' '
+            and then Source (Pos) /= ASCII.HT
+            and then Source (Pos) /= ASCII.LF
+            and then Source (Pos) /= ASCII.CR;
+         Pos := Pos + 1;
+      end loop;
+
+      if Pos > Source'Last then
+         return 0;
+      end if;
+      return Pos;
+   end Find_Value_Start;
+
+   function Extract_JSON_String
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return String
+   is
+      Start_Pos : constant Natural := Find_Value_Start (Source, Key, From_Pos);
+      Pos       : Natural;
+      Escaped   : Boolean := False;
+      Result    : Unbounded_String := Null_Unbounded_String;
+   begin
+      if Start_Pos = 0 or else Source (Start_Pos) /= '"' then
+         return "";
+      end if;
+
+      Pos := Start_Pos + 1;
+      while Pos <= Source'Last loop
+         declare
+            C : constant Character := Source (Pos);
+         begin
+            if Escaped then
+               case C is
+                  when '"' | '\' | '/' =>
+                     Append (Result, C);
+                  when 'n' =>
+                     Append (Result, ASCII.LF);
+                  when 'r' =>
+                     Append (Result, ASCII.CR);
+                  when 't' =>
+                     Append (Result, ASCII.HT);
+                  when others =>
+                     --  Preserve unknown escapes (e.g. regex "\s", "\b").
+                     Append (Result, '\');
+                     Append (Result, C);
+               end case;
+               Escaped := False;
+            elsif C = '\' then
+               Escaped := True;
+            elsif C = '"' then
+               return To_String (Result);
+            else
+               Append (Result, C);
+            end if;
+         end;
+         Pos := Pos + 1;
+      end loop;
+
+      return To_String (Result);
+   end Extract_JSON_String;
+
+   function Extract_JSON_Number
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return String
+   is
+      Start_Pos : constant Natural := Find_Value_Start (Source, Key, From_Pos);
+      Pos       : Natural;
+      Result    : Unbounded_String := Null_Unbounded_String;
+   begin
+      if Start_Pos = 0 then
+         return "";
+      end if;
+
+      Pos := Start_Pos;
+      while Pos <= Source'Last loop
+         declare
+            C : constant Character := Source (Pos);
+         begin
+            exit when not (C in '0' .. '9'
+               or else C = '-'
+               or else C = '+'
+               or else C = '.'
+               or else C = 'e'
+               or else C = 'E');
+            Append (Result, C);
+         end;
+         Pos := Pos + 1;
+      end loop;
+
+      return Ada.Strings.Fixed.Trim (To_String (Result), Ada.Strings.Both);
+   end Extract_JSON_Number;
+
+   function Find_Matching_Closing
+      (Source     : String;
+       Open_Pos   : Positive;
+       Open_Char  : Character;
+       Close_Char : Character) return Natural
+   is
+      Depth     : Natural := 0;
+      In_String : Boolean := False;
+      Escaped   : Boolean := False;
+   begin
+      for I in Open_Pos .. Source'Last loop
+         declare
+            C : constant Character := Source (I);
+         begin
+            if In_String then
+               if Escaped then
+                  Escaped := False;
+               elsif C = '\' then
+                  Escaped := True;
+               elsif C = '"' then
+                  In_String := False;
+               end if;
+            else
+               if C = '"' then
+                  In_String := True;
+               elsif C = Open_Char then
+                  Depth := Depth + 1;
+               elsif C = Close_Char then
+                  if Depth = 0 then
+                     return 0;
+                  end if;
+                  Depth := Depth - 1;
+                  if Depth = 0 then
+                     return I;
+                  end if;
+               end if;
+            end if;
+         end;
+      end loop;
+
+      return 0;
+   end Find_Matching_Closing;
+
+   function Normalize_Regex (Raw : String) return String is
+      Result : Unbounded_String := Null_Unbounded_String;
+      Pos    : Natural := Raw'First;
+   begin
+      while Pos <= Raw'Last loop
+         if Pos + 3 <= Raw'Last and then Raw (Pos .. Pos + 3) = "(?i)" then
+            Pos := Pos + 4;
+         elsif Pos + 4 <= Raw'Last
+            and then Raw (Pos .. Pos + 4) = "(?-i)"
+         then
+            Pos := Pos + 5;
+         else
+            Append (Result, Raw (Pos));
+            Pos := Pos + 1;
+         end if;
+      end loop;
+
+      return To_String (Result);
+   end Normalize_Regex;
+
+   function Clamp_Weight (Value : Float) return Float is
+   begin
+      return Float'Min (1.0, Float'Max (0.0, Value));
+   end Clamp_Weight;
+
+   function Parse_Weight (Raw : String; Default : Float) return Float is
+   begin
+      if Raw'Length = 0 then
+         return Default;
+      end if;
+      return Clamp_Weight (Float'Value (Raw));
+   exception
+      when others =>
+         return Default;
+   end Parse_Weight;
+
+   function To_Category
+      (Raw     : String;
+       Default : Metric_Category) return Metric_Category
+   is
+      Lower : constant String := To_Lower (Raw);
+   begin
+      if Contains (Lower, "temporal") then
+         return Temporal_Intrusion;
+      elsif Contains (Lower, "linguistic") then
+         return Linguistic_Pathology;
+      elsif Contains (Lower, "epistemic") then
+         return Epistemic_Failure;
+      elsif Contains (Lower, "paternalism") then
+         return Paternalism;
+      elsif Contains (Lower, "telemetry") then
+         return Telemetry_Anxiety;
+      elsif Contains (Lower, "coherence") then
+         return Interaction_Coherence;
+      elsif Contains (Lower, "completion") then
+         return Completion_Integrity;
+      elsif Contains (Lower, "strategic") then
+         return Strategic_Rigidity;
+      elsif Contains (Lower, "scope") then
+         return Scope_Fidelity;
+      elsif Contains (Lower, "recovery") then
+         return Recovery_Competence;
+      else
+         return Default;
+      end if;
+   end To_Category;
+
+   function To_Severity
+      (Raw     : String;
+       Default : Severity_Level) return Severity_Level
+   is
+      Lower : constant String := To_Lower (Raw);
+   begin
+      if Contains (Lower, "critical") then
+         return Critical;
+      elsif Contains (Lower, "high") then
+         return High;
+      elsif Contains (Lower, "medium") then
+         return Medium;
+      elsif Contains (Lower, "low") then
+         return Low;
+      elsif Contains (Lower, "none") then
+         return None;
+      else
+         return Default;
+      end if;
+   end To_Severity;
+
    ---------------------------------------------------------------------------
    --  Make_Pattern
    --
@@ -98,13 +370,14 @@ package body Vexometer.Patterns is
        Severity    : Severity_Level;
        Weight      : Float;
        Explanation : String;
-       FP_Risk     : Float := 0.1) return Pattern_Definition
+      FP_Risk     : Float := 0.1) return Pattern_Definition
    is
-      PD : Pattern_Definition;
+      PD          : Pattern_Definition;
+      Clean_Regex : constant String := Normalize_Regex (Regex);
    begin
       PD.ID          := To_Unbounded_String (ID);
       PD.Name        := To_Unbounded_String (Name);
-      PD.Regex       := To_Unbounded_String (Regex);
+      PD.Regex       := To_Unbounded_String (Clean_Regex);
       PD.Category    := Category;
       PD.Severity    := Severity;
       PD.Weight      := Weight;
@@ -114,7 +387,7 @@ package body Vexometer.Patterns is
 
       --  Compile the regex into the fixed-size pattern matcher.
       --  GNAT.Regpat.Compile overwrites the discriminated Compiled field.
-      GNAT.Regpat.Compile (PD.Compiled, Regex,
+      GNAT.Regpat.Compile (PD.Compiled, Clean_Regex,
          GNAT.Regpat.Case_Insensitive);
 
       return PD;
@@ -544,17 +817,108 @@ package body Vexometer.Patterns is
       (DB   : in out Pattern_Database;
        Path : String)
    is
-      pragma Unreferenced (Path);
+      use Ada.Strings.Fixed;
+      use Ada.Directories;
+
+      File_Category : Metric_Category := Linguistic_Pathology;
    begin
-      --  Ensure built-in patterns are loaded as a baseline.
       if not DB.Initialised then
          Initialize (DB);
       end if;
 
-      --  TODO: Implement lightweight JSON pattern file parser.
-      --  For now, external pattern files are not supported and the call
-      --  is a no-op beyond initialisation. This avoids introducing a
-      --  dependency on GNATCOLL.JSON.
+      if not Exists (Path) or else Kind (Path) /= Ordinary_File then
+         return;
+      end if;
+
+      declare
+         Content     : constant String := Read_File (Path);
+         Search_From : Natural;
+         Id_Key_Pos  : Natural;
+         Obj_Start   : Natural;
+         Obj_End     : Natural;
+      begin
+         if Content'Length = 0 then
+            return;
+         end if;
+
+         declare
+            File_Category_Str : constant String :=
+               Extract_JSON_String (Content, "category");
+         begin
+            if File_Category_Str'Length > 0 then
+               File_Category := To_Category
+                  (File_Category_Str, Linguistic_Pathology);
+            end if;
+         end;
+
+         Search_From := Content'First;
+         loop
+            Id_Key_Pos := Index (Content, """id""", Search_From);
+            exit when Id_Key_Pos = 0;
+
+            Obj_Start := Id_Key_Pos;
+            while Obj_Start > Content'First
+               and then Content (Obj_Start) /= '{'
+            loop
+               Obj_Start := Obj_Start - 1;
+            end loop;
+
+            exit when Content (Obj_Start) /= '{';
+
+            Obj_End := Find_Matching_Closing (Content, Obj_Start, '{', '}');
+            exit when Obj_End = 0;
+
+            declare
+               Obj            : constant String := Content (Obj_Start .. Obj_End);
+               Pattern_ID     : constant String := Extract_JSON_String (Obj, "id");
+               Pattern_Name   : constant String := Extract_JSON_String (Obj, "name");
+               Pattern_Regex  : constant String := Extract_JSON_String (Obj, "regex");
+               Severity_Str   : constant String := Extract_JSON_String (Obj, "severity");
+               Weight_Str     : constant String := Extract_JSON_Number (Obj, "weight");
+               Explain_Str    : constant String := Extract_JSON_String
+                  (Obj, "explanation");
+               Category_Str   : constant String := Extract_JSON_String
+                  (Obj, "category");
+               Category_Value : Metric_Category := File_Category;
+            begin
+               if Category_Str'Length > 0 then
+                  Category_Value := To_Category (Category_Str, File_Category);
+               end if;
+
+               if Pattern_ID'Length > 0
+                  and then Pattern_Regex'Length > 0
+                  and then not DB.By_ID.Contains (Pattern_ID)
+               then
+                  declare
+                     Loaded : Pattern_Definition;
+                  begin
+                     Loaded := Make_Pattern (
+                        ID          => Pattern_ID,
+                        Name        =>
+                           (if Pattern_Name'Length > 0 then Pattern_Name
+                            else Pattern_ID),
+                        Regex       => Pattern_Regex,
+                        Category    => Category_Value,
+                        Severity    => To_Severity (Severity_Str, Medium),
+                        Weight      => Parse_Weight (Weight_Str, 0.5),
+                        Explanation =>
+                           (if Explain_Str'Length > 0 then Explain_Str
+                            else "Loaded from " & Path)
+                     );
+                     Add_Pattern (DB, Loaded);
+                  exception
+                     when others =>
+                        null;
+                  end;
+               end if;
+            end;
+
+            if Obj_End >= Content'Last then
+               exit;
+            end if;
+            Search_From := Obj_End + 1;
+         end loop;
+      end;
    end Load_From_File;
 
    ---------------------------------------------------------------------------

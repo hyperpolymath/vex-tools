@@ -51,7 +51,7 @@
 COMPONENT                          STATUS              NOTES
 ─────────────────────────────────  ──────────────────  ─────────────────────────────────
 ISA & INTERVENTION
-  ISA (vexometer analyser)          ███████░░░  70%    Core metrics implemented; CLI/test wiring incomplete
+  ISA (vexometer analyser)          ████████░░  80%    Core metrics, JSON loaders, and CLI/report wiring implemented
   ISA Satellites                    █████░░░░░  45%    Protocol/docs exist; most satellites still planned
   Lazy Eliminator                   ████████░░  75%    Core analyzer tested; polish/integration pending
   Satellite Template                █████████░  90%    Template structure stable by design
@@ -62,12 +62,12 @@ VEXT PROTOCOL
   Neutrality Proofs                 ██░░░░░░░░  25%    Proof direction defined; implementation in progress
 
 REPO INFRASTRUCTURE
-  Justfile Automation               ████████░░  80%    Main flows working; component parity still in progress
+  Justfile Automation               █████████░  90%    Main flows and trust-manifest gates wired
   .machine_readable/                █████████░  90%    Metadata aligned to current monorepo
   Consolidation (2026)              ██████████ 100%    6 repos successfully merged
 
 ─────────────────────────────────────────────────────────────────────────────
-OVERALL:                            ██████░░░░  ~65%   Core operational; ecosystem integration still maturing
+OVERALL:                            ███████░░░  ~70%   Core operational; ecosystem integration still maturing
 ```
 
 ## Key Dependencies

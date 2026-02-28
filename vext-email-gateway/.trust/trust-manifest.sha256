@@ -1,0 +1,10 @@
+# trust-manifest v1
+# component=vext-email-gateway
+# generated_at=2026-02-28T11:49:08Z
+42a8ecf678af0a843951abaf578701c3c4d63b921efccfc5ad5c05fd45d9a130  README.adoc
+cb5071ddba9ec3d23f4023cc0d3a2d0db695f7647035ba9d80fd114506948ce9  ROADMAP.adoc
+4a1c42c39d76199d1f1126d4de83b35fd0e0fadbee3e939d857c7410d4ce7c59  SECURITY.md
+f45c079bf6d69d63b6f2f650102d5c5d672ba2c644228be7c4b425ae9b3387a3  contractiles/must/Mustfile
+ec6317f4b5e8ebf54f2b6dc3bd77409c9c509b679d8ffaf092618e705a0a82d8  contractiles/trust/Trustfile.a2ml
+f3d8bb41f63a88a383028c9bd6d80be1a843905dfa7ca169f6f8e6190d788f73  RSR_OUTLINE.adoc
+3944e4c6756a3f72873cefbc146ae847c6ccf9f9bcb4d168bf38255e07d9065b  docs/CITATIONS.adoc

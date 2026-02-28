@@ -5,6 +5,7 @@ pragma Ada_2022;
 with Ada.Text_IO;                use Ada.Text_IO;
 with Ada.Exceptions;             use Ada.Exceptions;
 with Ada.Strings.Unbounded;      use Ada.Strings.Unbounded;
+with Ada.Strings.Fixed;          use Ada.Strings.Fixed;
 
 with Vexometer.Core;             use Vexometer.Core;
 with Vexometer.CII;
@@ -99,11 +100,71 @@ procedure Test_Runner is
       end;
    end Test_Probe_Suite;
 
+   procedure Test_Pattern_JSON_Loading is
+      DB           : Vexometer.Patterns.Pattern_Database;
+      Before_Count : Natural;
+      After_Count  : Natural;
+      Loaded       : Vexometer.Patterns.Pattern_Definition;
+   begin
+      Vexometer.Patterns.Initialize (DB);
+      Before_Count := Vexometer.Patterns.Pattern_Count (DB);
+
+      Vexometer.Patterns.Load_From_File
+         (DB, "data/patterns/linguistic_pathology.json");
+      After_Count := Vexometer.Patterns.Pattern_Count (DB);
+
+      Assert_True (After_Count > Before_Count,
+         "Patterns: expected JSON loader to add external patterns");
+
+      Loaded := Vexometer.Patterns.Get_Pattern (DB, "LPS-SYCOPHANCY-001");
+      Assert_True (Index (To_String (Loaded.Regex), "\s*") > 0,
+         "Patterns: expected regex escapes to be preserved in loaded pattern");
+   end Test_Pattern_JSON_Loading;
+
+   procedure Test_Probe_JSON_Loading is
+      Suite          : Vexometer.Probes.Probe_Suite;
+      Before_Count   : Natural;
+      After_Count    : Natural;
+      Found_Loaded   : Boolean := False;
+      Escape_Present : Boolean := False;
+   begin
+      Vexometer.Probes.Initialize (Suite);
+      Before_Count := Vexometer.Probes.Probe_Count (Suite);
+
+      Vexometer.Probes.Load_From_File
+         (Suite, "data/probes/behavioural_probes.json");
+      After_Count := Vexometer.Probes.Probe_Count (Suite);
+
+      Assert_True (After_Count > Before_Count,
+         "Probes: expected JSON loader to add external probes");
+
+      declare
+         Probes : constant Vexometer.Probes.Probe_Vector :=
+            Vexometer.Probes.Get_Probes (Suite);
+      begin
+         for Probe of Probes loop
+            if To_String (Probe.ID) = "PROBE-BREVITY-001" then
+               Found_Loaded := True;
+               Escape_Present :=
+                  Index (To_String (Probe.Success_Patterns), "\.") > 0;
+               exit;
+            end if;
+         end loop;
+      end;
+
+      Assert_True (Found_Loaded,
+         "Probes: expected loaded probe ID PROBE-BREVITY-001");
+      Assert_True (Escape_Present,
+         "Probes: expected regex escapes to be preserved in loaded probe");
+   end Test_Probe_JSON_Loading;
+
 begin
    Test_Core_Calculation;
    Test_CII_Detection;
    Test_Pattern_Engine;
    Test_Probe_Suite;
+   Test_Pattern_JSON_Loading;
+   Test_Probe_JSON_Loading;
 
    Put_Line ("all vexometer core tests passed");
 

@@ -1,0 +1,10 @@
+# trust-manifest v1
+# component=satellite-template
+# generated_at=2026-02-28T11:49:08Z
+ac3496cf7ea8d0361967b03bb48e2b75298cd3087f5bd2e8c636d363dd79b4ae  README.adoc
+165f3686ef9f24fe24b5093c2def812c5bec3e0edd30cf758509145f413de93b  ROADMAP.adoc
+7040d5de9d9fbaa7d3319c10dc546e32c69b2dee66c702ad01c196df55b6ac06  SECURITY.md
+5252195ad39601e613ba3638c20ba0ad19bf0d545e855a18a2653d62e1e2e24d  contractiles/must/Mustfile
+fdded8ed9d5aee991ef2c5ab4ba9044564dbdd85d32a1478d45db6a35e5672ef  contractiles/trust/Trustfile.a2ml
+e6c29a99d1225f6437395abdf193949624c20516b2115215c7ef929ec6be649b  RSR_OUTLINE.adoc
+67068babc6554ea4c26dd85c6449b17fcb43b63ee068444b05e29bf6cd7b9c5c  docs/CITATIONS.adoc

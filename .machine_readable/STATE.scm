@@ -8,13 +8,13 @@
     (name "vex-tools")
     (canonical-product-name "ISA")
     (legacy-product-name "Vexometer")
-    (overall-completion-percentage 65))
+    (overall-completion-percentage 70))
   (component-status
     (component
       (name "isa-core")
       (path "vexometer")
       (status in-progress)
-      (completion-percentage 70))
+      (completion-percentage 80))
     (component
       (name "isa-satellites-hub")
       (path "vexometer-satellites")

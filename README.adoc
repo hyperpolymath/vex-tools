@@ -53,6 +53,8 @@ Consolidated monorepo for all VEX-related tools: the ISA (Irritation Surface Ana
 just build-vexometer
 just build-vext
 just must-all
+just trust-generate
+just trust-verify
 just test-all
 just ci-gate
 just build-all

@@ -34,3 +34,11 @@ checks:
     description: "No unresolved template markers in security-critical docs."
     run: "bash -uc 'files=\"README.adoc ROADMAP.adoc SECURITY.md\"; [ -f RSR_OUTLINE.adoc ] && files=\"$files RSR_OUTLINE.adoc\"; [ -f docs/CITATIONS.adoc ] && files=\"$files docs/CITATIONS.adoc\"; ! rg -n \"rsr-template-repo|\\\\{\\\\{PROJECT\\\\}\\\\}|contents of Trustfile here\" $files'"
 
+
+  - name: trust-manifest-present
+    description: "Trust manifest must exist."
+    run: "test -f .trust/trust-manifest.sha256"
+
+  - name: trust-manifest-verifies
+    description: "Trust manifest digests must match current trust inputs."
+    run: "bash -uc 'sha256sum -c .trust/trust-manifest.sha256 >/dev/null'"

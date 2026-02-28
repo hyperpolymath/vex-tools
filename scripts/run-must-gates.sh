@@ -16,14 +16,17 @@ for component in "${components[@]}"; do
   echo "== must-gate: $component =="
   component_dir="$ROOT_DIR/$component"
   mustfile="$component_dir/contractiles/must/Mustfile"
+  manifest="$component_dir/.trust/trust-manifest.sha256"
 
   test -f "$mustfile"
   test -f "$component_dir/README.adoc"
   test -f "$component_dir/ROADMAP.adoc"
   test -f "$component_dir/SECURITY.md"
   test -f "$component_dir/contractiles/trust/Trustfile.a2ml"
+  test -f "$manifest"
 
   rg -n "security@|security/advisories/new" "$component_dir/SECURITY.md" >/dev/null
+  (cd "$component_dir" && sha256sum -c .trust/trust-manifest.sha256 >/dev/null)
 
   files=(
     "$component_dir/README.adoc"

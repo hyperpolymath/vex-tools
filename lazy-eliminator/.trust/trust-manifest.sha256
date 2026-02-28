@@ -1,0 +1,10 @@
+# trust-manifest v1
+# component=lazy-eliminator
+# generated_at=2026-02-28T11:49:08Z
+3b8fad7f7498e8a6c181a31103d8b2874819c8ef084ca084e19a3f4f78d4cd2c  README.adoc
+d6b8fac6dbc900613d4b057a60fae06aebb231ba5eab4df3621fc9fca84bc59d  ROADMAP.adoc
+e2d71893a4d97bf9d80c28de79b6711f62c1111c8f689b318db424356f30cee1  SECURITY.md
+2fa5078b7dea0cb7eddff51f004c466b5f65e02c3239e6ebcc41206bd7f66736  contractiles/must/Mustfile
+75ced95c129eae454ab4004ef74f1440d9b889b80f23a8817fb1d0e67309cf7a  contractiles/trust/Trustfile.a2ml
+88b0c15e6d195902016025f702e63af995cb28c4332902efc29cb72fb0c46846  RSR_OUTLINE.adoc
+3168779c30423a3deeace9ca926028b2752a3873739c62016b64608cf935a6cb  docs/CITATIONS.adoc

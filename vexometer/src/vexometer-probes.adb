@@ -15,6 +15,9 @@ pragma Ada_2022;
 
 with Ada.Strings.Fixed;
 with Ada.Characters.Handling;
+with Ada.Text_IO;
+with Ada.Strings;
+with Ada.Directories;
 
 package body Vexometer.Probes is
 
@@ -33,6 +36,393 @@ package body Vexometer.Probes is
    begin
       return Index (Source, Pattern) > 0;
    end Contains;
+
+   package String_Vectors is new Ada.Containers.Vectors
+      (Index_Type   => Positive,
+       Element_Type => Unbounded_String);
+
+   subtype String_Vector is String_Vectors.Vector;
+
+   function Read_File (Path : String) return String is
+      use Ada.Text_IO;
+
+      F       : File_Type;
+      Content : Unbounded_String := Null_Unbounded_String;
+   begin
+      Open (F, In_File, Path);
+      while not End_Of_File (F) loop
+         Append (Content, Get_Line (F));
+         Append (Content, ASCII.LF);
+      end loop;
+      Close (F);
+      return To_String (Content);
+   exception
+      when others =>
+         return "";
+   end Read_File;
+
+   function Find_Value_Start
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return Natural
+   is
+      use Ada.Strings.Fixed;
+
+      Key_Token : constant String := """" & Key & """";
+      Start_At  : constant Positive := Positive'Max (Source'First, From_Pos);
+      Key_Pos   : constant Natural := Index (Source, Key_Token, Start_At);
+      Pos       : Natural;
+   begin
+      if Source'Length = 0 then
+         return 0;
+      end if;
+
+      if Key_Pos = 0 then
+         return 0;
+      end if;
+
+      Pos := Index (Source, ":", Key_Pos + Key_Token'Length);
+      if Pos = 0 then
+         return 0;
+      end if;
+
+      Pos := Pos + 1;
+      while Pos <= Source'Last loop
+         exit when Source (Pos) /= ' '
+            and then Source (Pos) /= ASCII.HT
+            and then Source (Pos) /= ASCII.LF
+            and then Source (Pos) /= ASCII.CR;
+         Pos := Pos + 1;
+      end loop;
+
+      if Pos > Source'Last then
+         return 0;
+      end if;
+      return Pos;
+   end Find_Value_Start;
+
+   function Extract_JSON_String
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return String
+   is
+      Start_Pos : constant Natural := Find_Value_Start (Source, Key, From_Pos);
+      Pos       : Natural;
+      Escaped   : Boolean := False;
+      Result    : Unbounded_String := Null_Unbounded_String;
+   begin
+      if Start_Pos = 0 or else Source (Start_Pos) /= '"' then
+         return "";
+      end if;
+
+      Pos := Start_Pos + 1;
+      while Pos <= Source'Last loop
+         declare
+            C : constant Character := Source (Pos);
+         begin
+            if Escaped then
+               case C is
+                  when '"' | '\' | '/' =>
+                     Append (Result, C);
+                  when 'n' =>
+                     Append (Result, ASCII.LF);
+                  when 'r' =>
+                     Append (Result, ASCII.CR);
+                  when 't' =>
+                     Append (Result, ASCII.HT);
+                  when others =>
+                     --  Preserve unknown escapes (e.g. regex "\s", "\b").
+                     Append (Result, '\');
+                     Append (Result, C);
+               end case;
+               Escaped := False;
+            elsif C = '\' then
+               Escaped := True;
+            elsif C = '"' then
+               return To_String (Result);
+            else
+               Append (Result, C);
+            end if;
+         end;
+         Pos := Pos + 1;
+      end loop;
+
+      return To_String (Result);
+   end Extract_JSON_String;
+
+   function Extract_JSON_Number
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return String
+   is
+      Start_Pos : constant Natural := Find_Value_Start (Source, Key, From_Pos);
+      Pos       : Natural;
+      Result    : Unbounded_String := Null_Unbounded_String;
+   begin
+      if Start_Pos = 0 then
+         return "";
+      end if;
+
+      Pos := Start_Pos;
+      while Pos <= Source'Last loop
+         declare
+            C : constant Character := Source (Pos);
+         begin
+            exit when not (C in '0' .. '9'
+               or else C = '-'
+               or else C = '+'
+               or else C = '.'
+               or else C = 'e'
+               or else C = 'E');
+            Append (Result, C);
+         end;
+         Pos := Pos + 1;
+      end loop;
+
+      return Ada.Strings.Fixed.Trim (To_String (Result), Ada.Strings.Both);
+   end Extract_JSON_Number;
+
+   function Find_Matching_Closing
+      (Source     : String;
+       Open_Pos   : Positive;
+       Open_Char  : Character;
+       Close_Char : Character) return Natural
+   is
+      Depth     : Natural := 0;
+      In_String : Boolean := False;
+      Escaped   : Boolean := False;
+   begin
+      for I in Open_Pos .. Source'Last loop
+         declare
+            C : constant Character := Source (I);
+         begin
+            if In_String then
+               if Escaped then
+                  Escaped := False;
+               elsif C = '\' then
+                  Escaped := True;
+               elsif C = '"' then
+                  In_String := False;
+               end if;
+            else
+               if C = '"' then
+                  In_String := True;
+               elsif C = Open_Char then
+                  Depth := Depth + 1;
+               elsif C = Close_Char then
+                  if Depth = 0 then
+                     return 0;
+                  end if;
+                  Depth := Depth - 1;
+                  if Depth = 0 then
+                     return I;
+                  end if;
+               end if;
+            end if;
+         end;
+      end loop;
+
+      return 0;
+   end Find_Matching_Closing;
+
+   function Extract_JSON_Array
+      (Source   : String;
+       Key      : String;
+       From_Pos : Positive := 1) return String
+   is
+      Start_Pos : constant Natural := Find_Value_Start (Source, Key, From_Pos);
+      End_Pos   : Natural;
+   begin
+      if Start_Pos = 0 or else Source (Start_Pos) /= '[' then
+         return "";
+      end if;
+
+      End_Pos := Find_Matching_Closing (Source, Start_Pos, '[', ']');
+      if End_Pos = 0 or else End_Pos <= Start_Pos then
+         return "";
+      end if;
+
+      return Source (Start_Pos + 1 .. End_Pos - 1);
+   end Extract_JSON_Array;
+
+   function Parse_String_Array (Array_Content : String) return String_Vector is
+      Pos      : Natural;
+      Escaped  : Boolean := False;
+      Current  : Unbounded_String := Null_Unbounded_String;
+      Result   : String_Vector := String_Vectors.Empty_Vector;
+      In_Value : Boolean := False;
+   begin
+      if Array_Content'Length = 0 then
+         return Result;
+      end if;
+
+      Pos := Array_Content'First;
+      while Pos <= Array_Content'Last loop
+         declare
+            C : constant Character := Array_Content (Pos);
+         begin
+            if In_Value then
+               if Escaped then
+                  case C is
+                     when '"' | '\' | '/' =>
+                        Append (Current, C);
+                     when 'n' =>
+                        Append (Current, ASCII.LF);
+                     when 'r' =>
+                        Append (Current, ASCII.CR);
+                     when 't' =>
+                        Append (Current, ASCII.HT);
+                     when others =>
+                        --  Preserve unknown escapes in regex strings.
+                        Append (Current, '\');
+                        Append (Current, C);
+                  end case;
+                  Escaped := False;
+               elsif C = '\' then
+                  Escaped := True;
+               elsif C = '"' then
+                  Result.Append (Current);
+                  Current := Null_Unbounded_String;
+                  In_Value := False;
+               else
+                  Append (Current, C);
+               end if;
+            elsif C = '"' then
+               In_Value := True;
+               Current := Null_Unbounded_String;
+            end if;
+         end;
+         Pos := Pos + 1;
+      end loop;
+
+      return Result;
+   end Parse_String_Array;
+
+   function Join_Strings
+      (Values    : String_Vector;
+       Separator : String := "|") return Unbounded_String
+   is
+      Result : Unbounded_String := Null_Unbounded_String;
+   begin
+      for Item of Values loop
+         if Length (Result) > 0 then
+            Append (Result, Separator);
+         end if;
+         Append (Result, To_String (Item));
+      end loop;
+      return Result;
+   end Join_Strings;
+
+   function Parse_Weight (Raw : String; Default : Float) return Float is
+   begin
+      if Raw'Length = 0 then
+         return Default;
+      end if;
+      return Float'Min (2.0, Float'Max (0.0, Float'Value (Raw)));
+   exception
+      when others =>
+         return Default;
+   end Parse_Weight;
+
+   function Parse_Natural (Raw : String; Default : Natural) return Natural is
+   begin
+      if Raw'Length = 0 then
+         return Default;
+      end if;
+      return Natural'Value (Raw);
+   exception
+      when others =>
+         return Default;
+   end Parse_Natural;
+
+   function To_Probe_Category
+      (Raw     : String;
+       Default : Probe_Category) return Probe_Category
+   is
+      Lower : constant String := To_Lower (Raw);
+   begin
+      if Contains (Lower, "competence") then
+         return Competence_Assumption;
+      elsif Contains (Lower, "refusal") then
+         return Refusal_Boundary;
+      elsif Contains (Lower, "context") then
+         return Context_Retention;
+      elsif Contains (Lower, "correction") then
+         return Correction_Acceptance;
+      elsif Contains (Lower, "brevity") then
+         return Brevity_Respect;
+      elsif Contains (Lower, "style") then
+         return Style_Matching;
+      elsif Contains (Lower, "uncertainty") then
+         return Uncertainty_Honesty;
+      elsif Contains (Lower, "direct") then
+         return Direct_Instruction;
+      elsif Contains (Lower, "negative") then
+         return Negative_Request;
+      elsif Contains (Lower, "follow_up")
+         or else Contains (Lower, "follow-up")
+         or else Contains (Lower, "memory")
+      then
+         return Follow_Up_Memory;
+      else
+         return Default;
+      end if;
+   end To_Probe_Category;
+
+   function To_Trait (Raw : String) return Response_Trait is
+      Lower : constant String := To_Lower (Raw);
+   begin
+      if Contains (Lower, "concise") then
+         return Concise;
+      elsif Contains (Lower, "technical") then
+         return Technical;
+      elsif Contains (Lower, "casual") then
+         return Casual;
+      elsif Contains (Lower, "uncertain") then
+         return Uncertain;
+      elsif Contains (Lower, "confident") then
+         return Confident;
+      elsif Contains (Lower, "no_sycophancy")
+         or else Contains (Lower, "no sycophancy")
+      then
+         return No_Sycophancy;
+      elsif Contains (Lower, "no_hedging")
+         or else Contains (Lower, "no hedging")
+      then
+         return No_Hedging;
+      elsif Contains (Lower, "no_lecture")
+         or else Contains (Lower, "no lecture")
+      then
+         return No_Lecture;
+      elsif Contains (Lower, "follows_format")
+         or else Contains (Lower, "follows format")
+      then
+         return Follows_Format;
+      elsif Contains (Lower, "respects_constraint")
+         or else Contains (Lower, "respects constraint")
+      then
+         return Respects_Constraint;
+      elsif Contains (Lower, "acknowledges_error")
+         or else Contains (Lower, "acknowledges error")
+      then
+         return Acknowledges_Error;
+      else
+         return Maintains_Context;
+      end if;
+   end To_Trait;
+
+   function Probe_ID_Exists
+      (Suite : Probe_Suite;
+       ID    : String) return Boolean
+   is
+   begin
+      for P of Suite.Probes loop
+         if To_String (P.ID) = ID then
+            return True;
+         end if;
+      end loop;
+      return False;
+   end Probe_ID_Exists;
 
    function Word_Count (Text : String) return Natural is
       --  Count whitespace-delimited words in Text.
@@ -341,14 +731,131 @@ package body Vexometer.Probes is
       (Suite : in out Probe_Suite;
        Path  : String)
    is
-      pragma Unreferenced (Path);
+      use Ada.Strings.Fixed;
+      use Ada.Directories;
+
    begin
       if not Suite.Initialised then
          Initialize (Suite);
       end if;
 
-      --  TODO: Implement lightweight JSON/TOML probe file parser.
-      --  For now, external probe files are not supported.
+      if not Exists (Path) or else Kind (Path) /= Ordinary_File then
+         return;
+      end if;
+
+      declare
+         Content     : constant String := Read_File (Path);
+         Search_From : Natural;
+         Id_Key_Pos  : Natural;
+         Obj_Start   : Natural;
+         Obj_End     : Natural;
+      begin
+         if Content'Length = 0 then
+            return;
+         end if;
+
+         Search_From := Content'First;
+         loop
+            Id_Key_Pos := Index (Content, """id""", Search_From);
+            exit when Id_Key_Pos = 0;
+
+            Obj_Start := Id_Key_Pos;
+            while Obj_Start > Content'First
+               and then Content (Obj_Start) /= '{'
+            loop
+               Obj_Start := Obj_Start - 1;
+            end loop;
+
+            exit when Content (Obj_Start) /= '{';
+
+            Obj_End := Find_Matching_Closing (Content, Obj_Start, '{', '}');
+            exit when Obj_End = 0;
+
+            declare
+               Obj          : constant String := Content (Obj_Start .. Obj_End);
+               Probe_ID     : constant String := Extract_JSON_String (Obj, "id");
+               Probe_Name   : constant String := Extract_JSON_String (Obj, "name");
+               Probe_Prompt : constant String := Extract_JSON_String
+                  (Obj, "prompt");
+            begin
+               if Probe_ID'Length > 0
+                  and then Probe_Prompt'Length > 0
+                  and then not Probe_ID_Exists (Suite, Probe_ID)
+               then
+                  declare
+                     Category_Str  : constant String :=
+                        Extract_JSON_String (Obj, "category");
+                     Context_Str   : constant String :=
+                        Extract_JSON_String (Obj, "system_context");
+                     Desc_Str      : constant String :=
+                        Extract_JSON_String (Obj, "description");
+                     Weight_Str    : constant String :=
+                        Extract_JSON_Number (Obj, "weight");
+                     Max_Str       : constant String :=
+                        Extract_JSON_Number (Obj, "max_length");
+                     Min_Str       : constant String :=
+                        Extract_JSON_Number (Obj, "min_length");
+
+                     Expected_Arr  : constant String :=
+                        Extract_JSON_Array (Obj, "expected_traits");
+                     Forbidden_Arr : constant String :=
+                        Extract_JSON_Array (Obj, "forbidden_traits");
+                     Success_Arr   : constant String :=
+                        Extract_JSON_Array (Obj, "success_patterns");
+                     Failure_Arr   : constant String :=
+                        Extract_JSON_Array (Obj, "failure_patterns");
+
+                     Expected_Set   : Trait_Set := Empty_Traits;
+                     Forbidden_Set  : Trait_Set := Empty_Traits;
+                     Expected_List  : constant String_Vector :=
+                        Parse_String_Array (Expected_Arr);
+                     Forbidden_List : constant String_Vector :=
+                        Parse_String_Array (Forbidden_Arr);
+
+                     Loaded : Behavioural_Probe;
+                  begin
+                     for T of Expected_List loop
+                        Expected_Set (To_Trait (To_String (T))) := True;
+                     end loop;
+
+                     for T of Forbidden_List loop
+                        Forbidden_Set (To_Trait (To_String (T))) := True;
+                     end loop;
+
+                     Loaded.ID := To_Unbounded_String (Probe_ID);
+                     Loaded.Name := To_Unbounded_String
+                        ((if Probe_Name'Length > 0 then Probe_Name else Probe_ID));
+                     Loaded.Category :=
+                        To_Probe_Category (Category_Str, Direct_Instruction);
+                     Loaded.Prompt := To_Unbounded_String (Probe_Prompt);
+                     Loaded.System_Context := To_Unbounded_String (Context_Str);
+                     Loaded.Expected_Traits := Expected_Set;
+                     Loaded.Forbidden_Traits := Forbidden_Set;
+                     Loaded.Success_Patterns :=
+                        Join_Strings (Parse_String_Array (Success_Arr));
+                     Loaded.Failure_Patterns :=
+                        Join_Strings (Parse_String_Array (Failure_Arr));
+                     Loaded.Max_Length := Parse_Natural (Max_Str, 0);
+                     Loaded.Min_Length := Parse_Natural (Min_Str, 0);
+                     Loaded.Weight := Parse_Weight (Weight_Str, 1.0);
+                     Loaded.Description := To_Unbounded_String
+                        ((if Desc_Str'Length > 0 then Desc_Str
+                         else "Loaded from " & Path));
+
+                     Add_Probe (Suite, Loaded);
+                  exception
+                     when others =>
+                        null;
+                  end;
+               end if;
+            end;
+
+            if Obj_End >= Content'Last then
+               exit;
+            end if;
+            Search_From := Obj_End + 1;
+         end loop;
+      end;
    end Load_From_File;
 
    ---------------------------------------------------------------------------

@@ -76,7 +76,9 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 
 * `Vexometer.Core`, `Vexometer.Patterns`, `Vexometer.Probes`, and `Vexometer.CII` package bodies are now implemented in-repo.
 * A real Ada test harness now runs for those core packages via `just test`.
-* Remaining P0 focus is external data loading parity (JSON pattern/probe ingestion) and CLI subcommand wiring.
+* External data loading parity is now in place: pattern/probe JSON files are ingested by `Load_From_File`.
+* CLI subcommands (`analyse`, `probe`, `compare`, `report`) are now wired with real execution paths.
+* Repository trust rotation now includes digest manifests (`.trust/trust-manifest.sha256`) and verification scripts.
 
 === Milestone 1.1: Pattern Engine
 
@@ -85,7 +87,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |Priority |Task |Effort
 
 |P0 |Implement `Vexometer.Patterns` package body *(Done 2026-02-28)* |Medium
-|P0 |Compile and load pattern JSON files |Low
+|P0 |Compile and load pattern JSON files *(Done 2026-02-28)* |Low
 |P0 |Implement pattern matching with GNAT.Regpat |Medium
 |P1 |Implement heuristic analysers (repetition, verbosity, competence) |High
 |P1 |Add pattern confidence scoring |Medium
@@ -112,7 +114,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |Priority |Task |Effort
 
 |P0 |Implement `Vexometer.Probes` package body *(Done 2026-02-28)* |Medium
-|P0 |Load probe definitions from JSON |Low
+|P0 |Load probe definitions from JSON *(Done 2026-02-28)* |Low
 |P0 |Implement probe result scoring |Medium
 |P1 |Implement trait detection from responses |High
 |P1 |Add multi-turn probe support for context testing |Medium
@@ -153,9 +155,9 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |===
 |Priority |Task |Effort
 
-|P0 |Implement `Run_Probe_Suite` procedure |Medium
+|P0 |Implement `Run_Probe_Suite` procedure *(Done 2026-02-28)* |Medium
 |P0 |Add progress callback support |Low
-|P1 |Implement `Compare_Models` for multi-model comparison |Medium
+|P1 |Implement `Compare_Models` for multi-model comparison *(Done 2026-02-28)* |Medium
 |P1 |Add result caching for reproducibility |Medium
 |P2 |Implement parallel API calls (rate-limit aware) |High
 |===
@@ -166,8 +168,8 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |===
 |Priority |Task |Effort
 
-|P0 |Implement JSON report generation |Low
-|P0 |Implement Markdown report generation |Low
+|P0 |Implement JSON report generation *(Done 2026-02-28)* |Low
+|P0 |Implement Markdown report generation *(Done 2026-02-28)* |Low
 |P1 |Implement HTML report with embedded SVG charts |High
 |P1 |Implement CSV export |Low
 |P2 |Implement LaTeX report generation |Medium
