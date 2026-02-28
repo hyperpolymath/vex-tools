@@ -222,13 +222,12 @@ package body Vexometer.CII is
 
          declare
             Det : Detection;
-            Matched_Text : constant access String :=
-               new String'(Content (Pos .. Pos + Pat.Pattern'Length - 1));
          begin
             Det.Kind     := Pat.Kind;
             Det.Location := Pos;
             Det.Length   := Pat.Pattern'Length;
-            Det.Matched  := Matched_Text;
+            Det.Matched  :=
+               new String'(Content (Pos .. Pos + Pat.Pattern'Length - 1));
             Det.Sev      := Severity_To_Score (Kind_Severity (Pat.Kind));
             Result.Append (Det);
          end;
@@ -367,11 +366,11 @@ package body Vexometer.CII is
    --  Register_Custom_Pattern
    ---------------------------------------------------------------------------
 
-   procedure Register_Custom_Pattern (Entry : Pattern_Entry) is
+   procedure Register_Custom_Pattern (Custom_Pattern : Pattern_Entry) is
    begin
       if Custom_Count < Max_Custom_Patterns then
          Custom_Count := Custom_Count + 1;
-         Custom_Patterns (Custom_Count) := Entry;
+         Custom_Patterns (Custom_Count) := Custom_Pattern;
       end if;
    end Register_Custom_Pattern;
 

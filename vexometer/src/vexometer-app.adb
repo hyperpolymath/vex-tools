@@ -17,7 +17,7 @@ with Vexometer.API;
 with Vexometer.Reports;
 with Vexometer.GUI;
 
-procedure Vexometer is
+procedure Vexometer.App is
 
    procedure Print_Usage is
    begin
@@ -130,4 +130,4 @@ exception
    when others =>
       Put_Line ("Error: An unexpected error occurred.");
       Set_Exit_Status (1);
-end Vexometer;
+end Vexometer.App;

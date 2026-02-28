@@ -205,10 +205,13 @@ package Vexometer.Patterns is
 
 private
 
+   type Category_Pattern_Vector_Array is
+      array (Metric_Category) of Pattern_Vectors.Vector;
+
    type Pattern_Database is tagged record
       Patterns     : Pattern_Vectors.Vector;
       By_ID        : Pattern_Maps.Map;
-      By_Category  : array (Metric_Category) of Pattern_Vectors.Vector;
+      By_Category  : Category_Pattern_Vector_Array;
       Initialised  : Boolean := False;
    end record;
 

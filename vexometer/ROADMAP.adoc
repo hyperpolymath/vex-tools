@@ -21,15 +21,15 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 
 |*Core Types*
 |10 metric categories, ISA calculation, findings, model profiles
-|Designed
+|Implemented (baseline)
 
 |*Pattern Engine*
 |Regex-based pattern detection, pattern database, heuristic analysers
-|Designed
+|Implemented (built-ins)
 
 |*Probe System*
 |Behavioural probe framework, 14 standardised probes, probe suite runner
-|Designed
+|Implemented (built-ins)
 
 |*API Clients*
 |Multi-provider support (Ollama, OpenAI, Anthropic, etc.), batch evaluation
@@ -45,7 +45,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 
 |*Extended Metrics*
 |CII, SRS, SFR, RCI specifications
-|Designed
+|Partially implemented
 
 |*Satellite Architecture*
 |Integration protocol, efficacy validation, 10 satellite specifications
@@ -72,13 +72,19 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 
 == Phase 1: Core Implementation
 
+=== Sprint Update (2026-02-28)
+
+* `Vexometer.Core`, `Vexometer.Patterns`, `Vexometer.Probes`, and `Vexometer.CII` package bodies are now implemented in-repo.
+* A real Ada test harness now runs for those core packages via `just test`.
+* Remaining P0 focus is external data loading parity (JSON pattern/probe ingestion) and CLI subcommand wiring.
+
 === Milestone 1.1: Pattern Engine
 
 [cols="1,4,1", options="header"]
 |===
 |Priority |Task |Effort
 
-|P0 |Implement `Vexometer.Patterns` package body |Medium
+|P0 |Implement `Vexometer.Patterns` package body *(Done 2026-02-28)* |Medium
 |P0 |Compile and load pattern JSON files |Low
 |P0 |Implement pattern matching with GNAT.Regpat |Medium
 |P1 |Implement heuristic analysers (repetition, verbosity, competence) |High
@@ -92,7 +98,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |===
 |Priority |Task |Effort
 
-|P0 |Implement `Vexometer.Core` package body |Medium
+|P0 |Implement `Vexometer.Core` package body *(Done 2026-02-28)* |Medium
 |P0 |Implement `Calculate_ISA` function |Low
 |P0 |Implement `Calculate_Category_Scores` function |Low
 |P1 |Implement `Aggregate_Profile` for multi-response analysis |Medium
@@ -105,7 +111,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |===
 |Priority |Task |Effort
 
-|P0 |Implement `Vexometer.Probes` package body |Medium
+|P0 |Implement `Vexometer.Probes` package body *(Done 2026-02-28)* |Medium
 |P0 |Load probe definitions from JSON |Low
 |P0 |Implement probe result scoring |Medium
 |P1 |Implement trait detection from responses |High
@@ -118,7 +124,7 @@ Development roadmap for ISA (Irritation Surface Analyser, formerly Vexometer).
 |===
 |Priority |Task |Effort
 
-|P0 |Implement `Vexometer.CII` - Completion Integrity Index |Medium
+|P0 |Implement `Vexometer.CII` - Completion Integrity Index *(Done 2026-02-28)* |Medium
 |P1 |Implement `Vexometer.SRS` - Strategic Rigidity Score |High
 |P1 |Implement `Vexometer.SFR` - Scope Fidelity Ratio |High
 |P1 |Implement `Vexometer.RCI` - Recovery Competence Index |High

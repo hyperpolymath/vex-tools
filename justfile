@@ -54,3 +54,10 @@ fmt-check:
 # Run clippy on Rust components
 lint:
     cd vext && cargo clippy -- -D warnings
+
+# Run contractiles Mustfile invariants across all components
+must-all:
+    ./scripts/run-must-gates.sh
+
+# Full CI-equivalent local gate
+ci-gate: must-all test-all

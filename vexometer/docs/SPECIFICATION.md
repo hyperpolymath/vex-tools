@@ -121,7 +121,7 @@ Inter-rater reliability: Krippendorff's α ≥ 0.7 required
 vexometer/
 ├── src/
 │   ├── vexometer.ads              -- Root package
-│   ├── vexometer.adb              -- Main entry point
+│   ├── vexometer-app.adb          -- Main entry point
 │   ├── vexometer-core.ads         -- Core types and data structures
 │   ├── vexometer-metrics.ads      -- Metric calculation and statistics
 │   ├── vexometer-patterns.ads     -- Pattern detection engine

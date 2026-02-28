@@ -197,9 +197,12 @@ package Vexometer.Probes is
 
 private
 
+   type Category_Probe_Vector_Array is
+      array (Probe_Category) of Probe_Vector;
+
    type Probe_Suite is tagged record
       Probes       : Probe_Vector;
-      By_Category  : array (Probe_Category) of Probe_Vector;
+      By_Category  : Category_Probe_Vector_Array;
       Initialised  : Boolean := False;
    end record;
 

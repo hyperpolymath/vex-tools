@@ -64,9 +64,9 @@ analyse: build
 
 # Run all tests
 test:
-    @echo "Automated Ada tests are not wired up yet."
-    @echo "Current status: no AUnit runner configured in this repository."
-    @echo "Use 'just build' to validate compilation once GtkAda/GNATCOLL/AWS are installed."
+    @echo "Running Ada package tests (Core, CII, Patterns, Probes)..."
+    gprbuild -p -P tests/vexometer_tests.gpr
+    ./bin/test_runner
 
 # Run tests with coverage
 test-coverage: build

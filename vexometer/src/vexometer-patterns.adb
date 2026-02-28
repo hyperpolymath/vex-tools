@@ -861,9 +861,9 @@ package body Vexometer.Patterns is
          while Pos <= Lower'Last and then Sent_Count < Max_Sentences loop
             if Lower (Pos) = '.'
                and then (Pos = Lower'Last
-                  or else Pos < Lower'Last
+                  or else (Pos < Lower'Last
                      and then (Lower (Pos + 1) = ' '
-                        or Lower (Pos + 1) = ASCII.LF))
+                        or else Lower (Pos + 1) = ASCII.LF)))
             then
                if Pos - Start >= 5 then
                   Sent_Count := Sent_Count + 1;

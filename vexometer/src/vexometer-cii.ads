@@ -111,7 +111,7 @@ package Vexometer.CII is
    function Get_Patterns return access constant Pattern_Entry;
    --  Get the built-in pattern database
 
-   procedure Register_Custom_Pattern (Entry : Pattern_Entry);
+   procedure Register_Custom_Pattern (Custom_Pattern : Pattern_Entry);
    --  Add a custom pattern to the database
 
 end Vexometer.CII;
