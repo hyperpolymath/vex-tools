@@ -84,3 +84,8 @@ trust-rotate:
 
 # Full CI-equivalent local gate
 ci-gate: must-all trust-verify test-all
+
+# [AUTO-GENERATED] Multi-arch / RISC-V target
+build-riscv:
+	@echo "Building for RISC-V..."
+	cross build --target riscv64gc-unknown-linux-gnu
