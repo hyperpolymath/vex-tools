@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# ECOSYSTEM.a2ml — vex-tools ecosystem position
+# Converted from ECOSYSTEM.scm on 2026-03-20
+
+[metadata]
+version = "0.2.0"
+last-updated = "2026-03-20"
+
+[project]
+name = "vex-tools"
+purpose = "Measure and reduce AI assistant irritation surfaces and support verifiable communication workflows"
+role = "toolkit-monorepo"
+
+[components]
+isa-core = { path = "vexometer", role = "measurement-hub" }
+isa-satellites-hub = { path = "vexometer-satellites", role = "intervention-registry" }
+satellite-template = { path = "satellite-template", role = "scaffold" }
+lazy-eliminator = { path = "lazy-eliminator", role = "intervention" }
+vext-core = { path = "vext", role = "protocol-core" }
+vext-email-gateway = { path = "vext-email-gateway", role = "protocol-bridge" }

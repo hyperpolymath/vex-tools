@@ -1,0 +1,11 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# NEUROSYM.a2ml — vex-tools neurosymbolic integration config
+# Converted from NEUROSYM.scm on 2026-03-20
+
+[metadata]
+version = "0.2.0"
+last-updated = "2026-03-20"
+
+[notes]
+current-state = "No active neurosymbolic runtime in monorepo root"
+planned-integration = "Tracked under vext roadmap and ISA satellites roadmap"
