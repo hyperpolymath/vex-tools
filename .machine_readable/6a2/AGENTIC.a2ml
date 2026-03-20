@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# AGENTIC.a2ml — vex-tools AI agent interaction patterns
+# Converted from AGENTIC.scm on 2026-03-20
+
+[metadata]
+version = "0.2.0"
+last-updated = "2026-03-20"
+
+[conventions]
+canonical-product-title = "The Vexometer: Irritation Surface Analyser for LLMs and related tools"
+canonical-product-name = "ISA"
+compatibility-identifier = "vexometer"
+status-report-source = "TOPOLOGY.md"

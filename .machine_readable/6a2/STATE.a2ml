@@ -1,0 +1,23 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# STATE.a2ml — vex-tools project state
+# Converted from STATE.scm on 2026-03-20
+
+[metadata]
+version = "0.2.0"
+last-updated = "2026-03-20"
+status = "active"
+
+[project-context]
+name = "vex-tools"
+canonical-product-title = "The Vexometer: Irritation Surface Analyser for LLMs and related tools"
+canonical-product-name = "ISA"
+legacy-product-name = "Vexometer"
+overall-completion-percentage = 70
+
+[component-status]
+isa-core = { path = "vexometer", status = "in-progress", percent = 80 }
+isa-satellites-hub = { path = "vexometer-satellites", status = "in-progress", percent = 45 }
+lazy-eliminator = { path = "lazy-eliminator", status = "in-progress", percent = 75 }
+satellite-template = { path = "satellite-template", status = "stable-template", percent = 90 }
+vext-core = { path = "vext", status = "in-progress", percent = 85 }
+vext-email-gateway = { path = "vext-email-gateway", status = "prototype", percent = 30 }
