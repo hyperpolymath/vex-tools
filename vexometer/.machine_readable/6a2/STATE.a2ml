@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# STATE.a2ml — Project state checkpoint
+# Converted from STATE.scm on 2026-03-21
+
+[metadata]
+project = "vexometer"
+version = "0.1.0"
+last-updated = "2025-01-17"
+status = "active"
+
+[project-context]
+name = "vexometer"
+completion-percentage = 90
+phase = "stable"
+tagline = "Template repository following Rhodium Standard Repository specification"
