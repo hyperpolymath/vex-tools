@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 // SPDX-License-Identifier: PMPL-1.0-or-later
 // Vext Email Gateway - Production implementation
 // Author: Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>

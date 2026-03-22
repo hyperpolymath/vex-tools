@@ -1,3 +1,4 @@
+#![forbid(unsafe_code)]
 // SPDX-License-Identifier: PMPL-1.0-or-later
 //! Vext - High-performance IRC notification daemon for version control systems
 //!
