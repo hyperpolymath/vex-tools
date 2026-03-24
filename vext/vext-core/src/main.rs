@@ -6,6 +6,7 @@
 
 mod config;
 mod error;
+mod groove;
 mod irc_client;
 mod listener;
 mod pool;
@@ -105,6 +106,14 @@ async fn main() -> Result<()> {
 
     // Initialize connection pool
     let pool = Arc::new(RwLock::new(ConnectionPool::new(config.clone())));
+
+    // Start the groove discovery endpoint (port 6480)
+    let groove_port = groove::GROOVE_PORT;
+    tokio::spawn(async move {
+        if let Err(e) = groove::run(groove_port).await {
+            tracing::error!("Groove endpoint failed: {}", e);
+        }
+    });
 
     // Start the notification listener
     info!("Starting notification listener on {}", args.listen);

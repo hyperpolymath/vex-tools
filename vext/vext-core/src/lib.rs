@@ -8,6 +8,7 @@
 
 pub mod config;
 pub mod error;
+pub mod groove;
 pub mod irc_client;
 pub mod listener;
 pub mod pool;
