@@ -11,7 +11,7 @@
 -- conversions must use explicit, type-safe wrappers. See the
 -- vexometer/src/abi/Foreign.idr for a reference implementation.
 --
--- TODO: Replace {{project}} placeholders with satellite-specific names.
+-- TODO: Replace satellite-template placeholders with satellite-specific names.
 -- TODO: Add satellite-specific FFI function declarations.
 
 module SatelliteTemplate.ABI.Foreign

@@ -5,9 +5,9 @@
 |||
 ||| @see https://en.wikipedia.org/wiki/Data_structure_alignment
 
-module {{PROJECT}}.ABI.Layout
+module VEXT_EMAIL_GATEWAY.ABI.Layout
 
-import {{PROJECT}}.ABI.Types
+import VEXT_EMAIL_GATEWAY.ABI.Types
 import Data.Vect
 import Data.So
 

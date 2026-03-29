@@ -150,14 +150,14 @@ dist: clean
     @echo "Creating distribution tarball..."
     mkdir -p dist
     tar --exclude='.git' --exclude='dist' --exclude='obj' --exclude='bin' \
-        -czvf dist/{{project}}-{{version}}.tar.gz .
-    @echo "Created dist/{{project}}-{{version}}.tar.gz"
+        -czvf dist/vexometer-{{version}}.tar.gz .
+    @echo "Created dist/vexometer-{{version}}.tar.gz"
 
 # Build container image with Podman
 container:
     @echo "Building container image..."
-    podman build -t {{project}}:{{version}} .
-    podman tag {{project}}:{{version}} {{project}}:latest
+    podman build -t vexometer:{{version}} .
+    podman tag vexometer:{{version}} vexometer:latest
 
 # =============================================================================
 # Development

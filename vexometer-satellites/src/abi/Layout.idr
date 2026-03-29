@@ -5,9 +5,9 @@
 |||
 ||| @see https://en.wikipedia.org/wiki/Data_structure_alignment
 
-module {{PROJECT}}.ABI.Layout
+module VEXOMETER_SATELLITES.ABI.Layout
 
-import {{PROJECT}}.ABI.Types
+import VEXOMETER_SATELLITES.ABI.Types
 import Data.Vect
 import Data.So
 
