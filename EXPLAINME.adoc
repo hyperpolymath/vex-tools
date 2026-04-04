@@ -1,22 +1,186 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 = vex-tools: Unified VEX Toolkit — Show Me The Receipts
 :toc:
+:toclevels: 3
 :icons: font
+:author: Jonathan D.A. Jewell
+:email: j.d.a.jewell@open.ac.uk
 
-The README makes claims. This file backs them up.
+NOTE: This repository mirrors the structure of `vexometer` — the canonical
+repository name after consolidation. `vex-tools` is the GitHub remote name
+that predates the rename. Both repositories share the same directory structure
+and sub-projects. If you are looking for the definitive EXPLAINME, see also
+`vexometer/EXPLAINME.adoc`.
+
+The README makes claims about this being the unified VEX toolkit. This file
+backs them up with specific sub-project paths, architecture notes, and honest
+caveats about completion state.
+
+== What vex-tools Contains
+
+`vex-tools` is a monorepo consolidating six previously independent repositories:
+
+* `vexometer/` — The Irritation Surface Analyser (ISA): Ada-based tool measuring
+  LLM irritation across 10 standardised dimensions
+* `vexometer-satellites/` — Umbrella hub for satellite intervention modules
+* `satellite-template/` — Scaffolding template for new satellite projects
+* `lazy-eliminator/` — Rust tool detecting lazy patterns in LLM-generated code
+* `vext/` — Vext verifiable communications protocol (Rust)
+* `vext-email-gateway/` — Email bridge for Vext (prototype)
+
+== Claim 1: Consolidated monorepo for all VEX-related tools
 
 [quote, README]
 ____
-Consolidated monorepo for all VEX-related tools centered on *The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools*, its satellite intervention system, and the Vext verifiable communications protocol.
+Consolidated monorepo for all VEX-related tools centered on The Vexometer:
+Irritation Surface Analyser (ISA) for LLMs and related tools, its satellite
+intervention system, and the Vext verifiable communications protocol.
 ____
+
+*How it works.*
+The root `Justfile` provides monorepo-wide orchestration: `just build-all`
+invokes the Ada GPRbuild for `vexometer/`, `cargo build` for `vext/` and
+`lazy-eliminator/`, and scaffolding checks for `satellite-template/`.
+`just test-all` runs each sub-project's test suite in sequence.
+`just ci-gate` is the single command used in CI to verify the whole monorepo
+meets quality and security gates.
+`vexometer/src/vexometer-core.ads` defines the 10-dimension `Metric_Category`
+enumeration that is the conceptual centre of the toolkit.
+`vext/src/vext-core/` implements the cryptographic neutrality proof primitives
+that allow Vext messages to carry verifiable provenance.
+`lazy-eliminator/src/` detects the completeness failures (stubs, ellipses,
+truncated outputs) that `vexometer`'s `Completion_Integrity` metric measures.
+
+*Honest caveat.*
+The `vext-email-gateway/` sub-project is explicitly a prototype; the email
+bridge is structurally present but end-to-end wiring (SMTP auth, delivery
+receipt loop-back to the Vext audit log) is in progress.
+
+== Claim 2: Satellite intervention system with a reusable template
+
+[quote, README]
+____
+ISA Satellites (vexometer-satellites) — Umbrella documentation and
+coordination hub for the satellite intervention system. Satellite Template —
+Scaffolding template for creating new ISA satellite projects.
+____
+
+*How it works.*
+`satellite-template/` provides the canonical directory skeleton for a new
+satellite: a `Justfile`, `stapeln.toml`, `contractile.just`, `ROADMAP.adoc`,
+`TEST-NEEDS.md`, `PROOF-NEEDS.md`, and stub Ada/Rust source files.
+Each satellite is an independent intervention module that consumes ISA scores
+from the `vexometer-api` and responds with corrective actions (e.g. prompting
+reformulation, flagging sycophancy patterns to the user).
+`vexometer-satellites/` maintains the registry of active satellites with
+their intervention domains, protocol versions, and status.
+`scripts/` contains helpers for generating Vext trust keys (`just trust-generate`)
+and verifying signed messages (`just trust-verify`) — demonstrating the
+cryptographic layer end-to-end.
+
+*Honest caveat.*
+Individual satellite implementations are not in this repository — they are
+separate repos that follow the template.
+The `vexometer-satellites/` hub is documentation-primary: it coordinates but
+does not contain the satellite runtime code.
+
+== Dogfooded Across The Account
+
+[cols="1,3", options="header"]
+|===
+| Tool / Repo | How vex-tools uses it
+
+| `panic-attacker`
+| Pre-commit security scan across all sub-projects
+
+| `contractile.just` / contractiles
+| Per-sub-project and monorepo-root contractile integration
+
+| `stapeln.toml`
+| Container build manifests for Ada ISA and Rust Vext tool images
+
+| `hypatia`
+| CI applies `Completion_Integrity` and `Linguistic_Pathology` rules — the same metrics the ISA measures
+
+| `echidna`
+| Ada proof obligations for `vexometer-metrics.ads` contracts verified by Echidna
+
+| `groove-spec`
+| Vext protocol designed for Groove inter-service compatibility
+
+| `NAMING.md`
+| Authoritative naming policy shared with `vexometer` canonical repo
+|===
 
 == File Map
 
-[cols="1,2"]
+[cols="2,4", options="header"]
 |===
 | Path | What's There
 
-| `test(s)/` | Test suite
+| `vexometer/src/vexometer-core.ads`
+| Core Ada types: `Metric_Category` (10-dimension enum), `ISA_Result`, `Metric_Score`
+
+| `vexometer/src/vexometer-metrics.ads`
+| Statistical functions with `Pre` contracts; `ISA_Calculator` tagged type
+
+| `vexometer/src/vexometer-cii.ads` / `.adb`
+| Completion Integrity Index: stub, ellipsis, and TODO placeholder detection
+
+| `vexometer/src/vexometer-sfr.ads` / `.adb`
+| Sycophancy Frequency Rate: hedge word ratio, affirmative opener density
+
+| `vexometer/src/abi/`
+| Idris2 ABI definitions for the Ada/Zig FFI boundary
+
+| `vexometer/ffi/`
+| Zig FFI: C-ABI-compatible wrapper around Ada procedures
+
+| `vexometer/vexometer.gpr`
+| GNAT project file for the Ada package
+
+| `vexometer/alire.toml`
+| Alire crate descriptor
+
+| `vext/src/vext-core/`
+| Vext protocol primitives: message format, cryptographic neutrality proof, signing
+
+| `vext/src/vext-tools/`
+| Vext CLI: `trust-generate`, `trust-verify`, `message-sign`, `message-check`
+
+| `vext/config.ncl`
+| Nickel trust parameter configuration
+
+| `lazy-eliminator/src/`
+| Rust: pattern detection for LLM laziness (stubs, placeholders, truncated outputs)
+
+| `vexometer-satellites/`
+| Registry and coordination hub for satellite intervention modules
+
+| `satellite-template/`
+| Canonical scaffolding template for new satellite projects
+
+| `vext-email-gateway/`
+| Prototype SMTP bridge for Vext protocol (end-to-end wiring in progress)
+
+| `scripts/`
+| Trust key generation, session replay, report extraction helpers
+
+| `Justfile`
+| Monorepo recipes: `build-all`, `test-all`, `bench-vexometer`, `trust-generate`, `trust-verify`, `ci-gate`
+
+| `NAMING.md`
+| Authoritative ISA/Vexometer identifier naming policy
+
+| `TOPOLOGY.md`
+| Visual architecture map and component completion dashboard
+
+| `stapeln.toml`
+| Container build manifest
+
+| `flake.nix` / `guix.scm`
+| Reproducible build environments (GNAT + Rust)
 |===
 
 == Questions?
