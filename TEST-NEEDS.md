@@ -1,5 +1,7 @@
 # CRG C Test Coverage Summary
 
+## CRG Grade: C — ACHIEVED 2026-04-04
+
 **Status: ACHIEVED - vex-tools upgraded from D to C**
 
 ## vext-email-gateway
