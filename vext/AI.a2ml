@@ -1,7 +1,21 @@
 # AI Assistant Instructions
 
+## ⚠️ Name Disambiguation
+
+**This `vext/` directory is an ISA component — NOT the cryptographic Vext protocol.**
+
+Three things share the name "vext":
+- **Here:** `vex-tools/vext` — ISA (Irritation Surface Analyser) component, named "vext" meaning
+  *vexed* (author was frustrated with Gemini/Copilot). Part of the `vex-tools` monorepo.
+- **Protocol spec:** `hyperpolymath/vext` — the actual Vext cryptographic protocol (BLAKE3 hash
+  chains, Idris2 proofs, Ed25519 signatures). Completely unrelated to this directory.
+- **Renamed IRC daemon:** `hyperpolymath/vcs-ircd` (formerly "vext") — VCS→IRC notification daemon.
+
+If you want the cryptographic Vext protocol → go to `hyperpolymath/vext`.
+If you want the ISA LLM analysis component → you are in the right place.
+
 ## Repository Focus
-- `Vext` is a component of the `vex-tools` monorepo.
+- `Vext` here is a component of the `vex-tools` (ISA) monorepo.
 - Treat this directory as RSR-aligned, but use real machine-readable sources instead of template placeholders.
 - Prefer keeping generated artifacts out of source control unless explicitly required.
 
