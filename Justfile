@@ -3,6 +3,8 @@
 # Author: Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
 
 # Default recipe: list available commands
+import? "contractile.just"
+
 default:
     @just --list
 
