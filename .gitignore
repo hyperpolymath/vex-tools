@@ -116,4 +116,10 @@ htmlcov/
 # Temp
 /tmp/
 *.tmp
-*.bak
+*.baknode_modules/
+_build/
+deps/
+.elixir_ls/
+.cache/
+build/
+dist/
