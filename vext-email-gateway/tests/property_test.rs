@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Property-based tests for vext email gateway
 
 use vext_email_gateway::{Message, DID, MessageId, VextError};

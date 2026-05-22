@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Benchmarks for vext email gateway performance
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};

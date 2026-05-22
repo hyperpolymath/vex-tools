@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! Connection pool management
 //!
 //! Manages multiple IRC connections per server with automatic scaling.

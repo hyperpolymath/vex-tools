@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! Spell checking support for vext commit messages
 //!
 //! Provides optional spell checking for commit messages before sending

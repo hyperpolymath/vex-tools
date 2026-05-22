@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! Notification listener
 //!
 //! TCP/UDP listener that accepts JSON notifications and relays them to IRC.

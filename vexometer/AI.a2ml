@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2024-2025 Jonathan D.A. Jewell
 // AI.a2ml - AI Assistant Instructions for Vexometer
 
@@ -31,7 +31,7 @@ Vexometer measures user experience—what it FEELS LIKE to work with models.
 - **GUI:** GtkAda
 - **Build:** Alire (Ada package manager)
 - **Package Management:** Guix primary, Nix fallback
-- **License:** PMPL-1.0-or-later
+- **License:** MPL-2.0
 
 ## Code Quality Standards
 
@@ -49,7 +49,7 @@ Use SPARK where verification adds value:
 
 ### Example
 ```ada
--- SPDX-License-Identifier: PMPL-1.0-or-later
+-- SPDX-License-Identifier: MPL-2.0
 
 package Vexometer.Metrics with SPARK_Mode is
 

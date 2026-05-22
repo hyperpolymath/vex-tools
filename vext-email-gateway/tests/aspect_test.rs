@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Security and aspect tests for vext email gateway
 
 use vext_email_gateway::{Message, DID, VextError, MessageId};
@@ -255,7 +255,7 @@ fn aspect_license_field_validation() {
     let signing_key = generate_signing_key();
 
     // Valid SPDX licenses
-    let valid_licenses = vec!["MIT", "Apache-2.0", "CC-BY-SA-4.0", "PMPL-1.0-or-later"];
+    let valid_licenses = vec!["MIT", "Apache-2.0", "CC-BY-SA-4.0", "MPL-2.0"];
 
     for license in valid_licenses {
         let mut msg = Message::new(

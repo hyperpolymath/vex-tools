@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Property-based tests for lazy-eliminator
 
 use vex_lazy_eliminator::{Analyzer, Language};

@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: PMPL-1.0-or-later
+# SPDX-License-Identifier: MPL-2.0
 # META.a2ml — vex-tools project metadata
 # Converted from META.scm on 2026-03-20
 
@@ -9,7 +9,7 @@ last-updated = "2026-03-20"
 [project-info]
 name = "vex-tools"
 type = "monorepo"
-license = "PMPL-1.0-or-later"
+license = "MPL-2.0"
 canonical-product-title = "The Vexometer: Irritation Surface Analyser for LLMs and related tools"
 canonical-product-name = "ISA"
 legacy-product-name = "Vexometer"

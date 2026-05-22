@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // E2E integration tests for lazy-eliminator code analyzer
 
 use vex_lazy_eliminator::{Analyzer, Language, IncompletenessKind};

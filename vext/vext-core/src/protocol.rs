@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! Notification protocol types
 //!
 //! Defines the JSON notification format used between hooks and the daemon.
