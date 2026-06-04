@@ -1,5 +1,6 @@
-#![forbid(unsafe_code)]
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+#![forbid(unsafe_code)]
 //! Vext - High-performance IRC notification daemon for version control systems
 //!
 //! This crate provides the core functionality for vext, including IRC client
