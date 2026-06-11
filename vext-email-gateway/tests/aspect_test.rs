@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // Security and aspect tests for vext email gateway
 
 use vext_email_gateway::{Message, DID, VextError, MessageId};

@@ -1,5 +1,6 @@
-#![forbid(unsafe_code)]
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+#![forbid(unsafe_code)]
 // Vext Email Gateway - Production implementation
 // Author: Jonathan D.A. Jewell <jonathan.jewell@open.ac.uk>
 

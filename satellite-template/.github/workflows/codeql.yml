@@ -12,6 +12,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       actions: read
       contents: read
@@ -33,4 +34,3 @@ jobs:
         uses: github/codeql-action/analyze@662472033e021d55d94146f66f6058822b0b39fd # v3
         with:
           category: "/language:${{ matrix.language }}"
-

@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # justfile for vex-SATELLITE_NAME
 
 set shell := ["bash", "-uc"]
@@ -36,3 +37,6 @@ validate before after:
     @echo "Comparing vexometer scores..."
     @echo "Before: {{before}}"
     @echo "After: {{after}}"
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

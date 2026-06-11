@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // E2E integration tests for vext email gateway pipeline
 
 use vext_email_gateway::{Message, DID};

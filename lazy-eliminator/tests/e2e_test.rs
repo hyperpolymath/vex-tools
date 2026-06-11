@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // E2E integration tests for lazy-eliminator code analyzer
 
 use vex_lazy_eliminator::{Analyzer, Language, IncompletenessKind};

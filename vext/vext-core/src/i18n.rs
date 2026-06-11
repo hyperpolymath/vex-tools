@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! Internationalization (i18n) support for vext
 //!
 //! Provides multi-language support for vext messages and notifications

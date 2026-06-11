@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # justfile for vex-lazy-eliminator
 
 # Build the project
@@ -41,3 +42,6 @@ bench:
 # Check dependencies for security issues
 audit:
     cargo audit
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true

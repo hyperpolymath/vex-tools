@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2024 Jonathan D.A. Jewell
+// Owner: Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 # SPDX-License-Identifier: MPL-2.0
 #
 # The Vexometer: Irritation Surface Analyser (ISA) for LLMs and related tools
@@ -209,3 +210,6 @@ push:
 # Show all available tasks
 help:
     @just --list
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true
